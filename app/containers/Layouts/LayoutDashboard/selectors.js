@@ -19,4 +19,10 @@ const makeSelectNotifStatus = () =>
     substate => substate.notifStatus
   );
 
-export { makeSelectData, makeSelectNotifStatus };
+const makeSelectLoading = () =>
+  createSelector(
+    selectLayoutDashboardDomain,
+    substate => substate.isLoading
+  );
+
+export { makeSelectData, makeSelectNotifStatus, makeSelectLoading };

@@ -95,7 +95,7 @@ export default function request (method, route, body = null) {
 
   const onSuccess = function (response) {
       //console.debug('Request Successful!', response);
-      return response.data.Data;
+      return response.data;
   }
 
   const onError = function (error) {
@@ -118,7 +118,7 @@ export default function request (method, route, body = null) {
           console.error('Error Message:', error.message);
       }
 
-      return Promise.reject(error.response || error.message);
+      return Promise.reject(error.response.data);
   }
 
   return api({

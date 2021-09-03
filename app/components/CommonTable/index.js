@@ -79,6 +79,8 @@ function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onCh
         return <StyledTableCell key={col} align="right">Operasi</StyledTableCell>
       case 'name':
         return <StyledTableCell key={col} align="right">Nama</StyledTableCell>
+      case 'code':
+        return <StyledTableCell key={col} align="right">Kode</StyledTableCell>
       default:
         return <StyledTableCell key={col} align="right">{col}</StyledTableCell>
     }

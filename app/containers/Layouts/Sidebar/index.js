@@ -29,6 +29,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+import HomeWorkIcon from '@material-ui/icons/HomeWork';
+import EventSeatIcon from '@material-ui/icons/EventSeat';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
@@ -96,6 +98,22 @@ export function Sidebar() {
               <DragIndicatorIcon />
             </ListItemIcon>
             <ListItemText primary="Satuan" />
+          </ListItem>
+        </List>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested} component={Link} to="/admin/room">
+            <ListItemIcon>
+              <HomeWorkIcon />
+            </ListItemIcon>
+            <ListItemText primary="Ruang" />
+          </ListItem>
+        </List>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested} component={Link} to="/admin/goods-type">
+            <ListItemIcon>
+              <EventSeatIcon />
+            </ListItemIcon>
+            <ListItemText primary="Tipe Barang" />
           </ListItem>
         </List>
       </Collapse>

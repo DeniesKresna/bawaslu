@@ -4,7 +4,7 @@
  *
  */
 
-import { CHANGE_NOTIF_STATUS } from './constants';
+import { CHANGE_NOTIF_STATUS, SET_LOADING } from './constants';
 
 /**
  * Changes the notif object
@@ -16,6 +16,20 @@ import { CHANGE_NOTIF_STATUS } from './constants';
 export function changeNotifStatus(payload) {
   return {
     type: CHANGE_NOTIF_STATUS,
+    payload
+  };
+}
+
+/**
+ * Changes the loading status
+ *
+ * @param  {boolean} payload The notif status
+ *
+ * @return {object} An action object with a type of SET_LOADING
+ */
+ export function changeLoading(payload) {
+  return {
+    type: SET_LOADING,
     payload
   };
 }

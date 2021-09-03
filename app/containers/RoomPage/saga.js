@@ -6,10 +6,10 @@ import { getDataSuccess, getDataFailed } from './actions';
 import { GET_DATA, CHANGE_DATA, CHANGE_ROW, DELETE_ROW } from './constants';
 import { changeNotifStatus, changeLoading } from '../Layouts/LayoutDashboard/actions';
 
-const key = 'units';
+const key = 'rooms';
 
 /**
- * Get Pagination Unit Data
+ * Get Pagination Room Data
  */
 export function* getData() {
   try {
@@ -33,7 +33,7 @@ export function* getData() {
 }
 
 /**
- * Set Unit Data
+ * Set Room Data
  */
  export function* setData(action) {
   try {
@@ -60,7 +60,7 @@ export function* getData() {
 }
 
 /**
- * Delete Unit Data
+ * Delete Room Data
  */
  export function* deleteData(action) {
   try {

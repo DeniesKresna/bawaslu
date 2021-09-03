@@ -2,20 +2,20 @@ import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
 /**
- * Direct selector to the unitPage state domain
+ * Direct selector to the goodTypes state domain
  */
 
-const selectUnitPageDomain = state => state.unitPage || initialState;
+const selectGoodsTypePageDomain = state => state.goodsTypePage || initialState;
 
 const makeSelectData = () =>
   createSelector(
-    selectUnitPageDomain,
+    selectGoodsTypePageDomain,
     substate => substate.data
   );
 
 const makeSelectSearch = () =>
   createSelector(
-    selectUnitPageDomain,
+    selectGoodsTypePageDomain,
     substate => substate.search
   );
 

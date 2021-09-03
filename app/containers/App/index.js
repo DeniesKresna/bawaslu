@@ -18,6 +18,8 @@ import LayoutDashboard from '../Layouts/LayoutDashboard';
 
 import HomePage from '../HomePage';
 import UnitPage from '../UnitPage';
+import RoomPage from '../RoomPage';
+import GoodsTypePage from '../GoodsTypePage';
 
 export default function App() {
   return (
@@ -28,6 +30,8 @@ export default function App() {
             <Switch>
               <Route exact path="/admin/home" component={ HomePage } />
               <Route exact path="/admin/unit" component={ UnitPage } />
+              <Route exact path="/admin/room" component={ RoomPage } />
+              <Route exact path="/admin/goods-type" component={ GoodsTypePage } />
               <Route component={NotFoundPage} />
             </Switch>
           </LayoutDashboard>

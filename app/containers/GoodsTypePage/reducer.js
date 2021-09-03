@@ -1,6 +1,6 @@
 /*
  *
- * UnitPage reducer
+ * GoodsTypePage reducer
  *
  */
 import produce from 'immer';
@@ -21,7 +21,7 @@ export const initialState = {
 };
 
 /* eslint-disable default-case, no-param-reassign */
-const unitPageReducer = (state = initialState, action) =>
+const goodsTypeReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
       case GET_DATA_SUCCESS:
@@ -33,4 +33,4 @@ const unitPageReducer = (state = initialState, action) =>
     }
   });
 
-export default unitPageReducer;
+export default goodsTypeReducer;

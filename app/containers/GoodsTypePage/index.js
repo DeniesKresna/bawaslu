@@ -1,6 +1,6 @@
 /**
  *
- * UnitPage
+ * GoodsTypePage
  *
  */
 
@@ -29,10 +29,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 
-export function UnitPage({ data, search, onGetData, onChangeSearch, onChangeData, onChangeRow, onDeleteRow }) {
-  useInjectReducer({ key: 'unitPage', reducer });
-  useInjectSaga({ key: 'unitPage', saga });
-  const entity = "Satuan";
+export function GoodsTypePage({ data, search, onGetData, onChangeSearch, onChangeData, onChangeRow, onDeleteRow }) {
+  useInjectReducer({ key: 'goodsTypePage', reducer });
+  useInjectSaga({ key: 'goodsTypePage', saga });
+  const entity = "Tipe Barang";
 
   const delayedGetData = useCallback(debounce(onGetData, 2000), []); 
   useEffect(() => {
@@ -46,13 +46,14 @@ export function UnitPage({ data, search, onGetData, onChangeSearch, onChangeData
   const handleCloseDialog = (md='cancel') => {
     if(md == 'cancel')
       setForm({});
-    else
+    else{
       onChangeRow(form);
+    }
     setDialogStatus(false);
   };
 
   const tableData = normalizeData(data);
-  const columnViewed = ['Number','name','updater','updated_at','operation'];
+  const columnViewed = ['Number','name','code','updater','updated_at','operation'];
 
   const handleChangePage = (event, newPage) => {
     data.current_page = newPage;
@@ -97,6 +98,27 @@ export function UnitPage({ data, search, onGetData, onChangeSearch, onChangeData
         component: "text-field",
         attribute: "name",
         label: "Name",
+        col: {
+          sm: 6
+        },
+        props:{
+          InputProps: {
+            readOnly: disabled
+          }
+        },
+        validationType: "string",
+        validations: {
+          required: true,
+          max: 50,
+        },
+      },
+      {
+        component: "text-field",
+        attribute: "code",
+        label: "Code",
+        col: {
+          sm: 6
+        },
         props:{
           InputProps: {
             readOnly: disabled
@@ -137,7 +159,7 @@ export function UnitPage({ data, search, onGetData, onChangeSearch, onChangeData
       <CommonTable
         search={search}
         tableData={tableData}
-        canBeUpdate={false}
+        canBeUpdate={true}
         canBeDelete={true}
         onChangeSearch={changeSearch}
         onChangeRowsPerPage={handleChangeRowsPerPage}
@@ -168,7 +190,7 @@ export function UnitPage({ data, search, onGetData, onChangeSearch, onChangeData
   );
 }
 
-UnitPage.propTypes = {
+GoodsTypePage.propTypes = {
   data: PropTypes.object,
   search: PropTypes.string,
   onGetData: PropTypes.func,
@@ -201,4 +223,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(UnitPage);
+)(GoodsTypePage);

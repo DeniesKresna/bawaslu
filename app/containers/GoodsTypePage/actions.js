@@ -1,6 +1,6 @@
 /*
  *
- * UnitPage actions
+ * GoodsTypePage actions
  *
  */
 

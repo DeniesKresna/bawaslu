@@ -11,7 +11,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import { useInjectReducer } from 'utils/injectReducer';
-import { makeSelectNotifStatus } from './selectors';
+import { makeSelectNotifStatus, makeSelectLoading } from './selectors';
 import { changeNotifStatus } from './actions';
 import reducer from './reducer';
 
@@ -36,6 +36,7 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Sidebar from '../Sidebar';
 
 function Copyright() {
@@ -136,7 +137,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function LayoutDashboard({ children, notifStatus, onNotifChange }) {
+export function LayoutDashboard({ children, notifStatus, isLoading, onNotifChange }) {
   useInjectReducer({ key: 'layoutDashboard', reducer });
 
   const classes = useStyles();
@@ -208,6 +209,7 @@ export function LayoutDashboard({ children, notifStatus, onNotifChange }) {
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={12} lg={12}>
+              { isLoading && <LinearProgress /> }
               <Paper className={fixedHeightPaper}>
                 { children }
               </Paper>
@@ -224,11 +226,13 @@ export function LayoutDashboard({ children, notifStatus, onNotifChange }) {
 
 LayoutDashboard.propTypes = {
   notifStatus: PropTypes.object,
+  isLoading: PropTypes.bool,
   onNotifChange: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
-  notifStatus: makeSelectNotifStatus()
+  notifStatus: makeSelectNotifStatus(),
+  isLoading: makeSelectLoading()
 });
 
 function mapDispatchToProps(dispatch) {

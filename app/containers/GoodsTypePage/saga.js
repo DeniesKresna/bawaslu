@@ -6,10 +6,10 @@ import { getDataSuccess, getDataFailed } from './actions';
 import { GET_DATA, CHANGE_DATA, CHANGE_ROW, DELETE_ROW } from './constants';
 import { changeNotifStatus, changeLoading } from '../Layouts/LayoutDashboard/actions';
 
-const key = 'units';
+const key = 'goods-types';
 
 /**
- * Get Pagination Unit Data
+ * Get Pagination Goods Type Data
  */
 export function* getData() {
   try {
@@ -33,13 +33,22 @@ export function* getData() {
 }
 
 /**
- * Set Unit Data
+ * Set Goods Type Data
  */
  export function* setData(action) {
   try {
     yield put(changeLoading(true));
-    const url = key;
-    const data = yield call(request, "POST", url, action.payload);
+    let url = key;
+
+    let method = "POST";
+    if(action.payload.ID !== undefined ){
+      if(action.payload.ID != null){
+        method = "PATCH";
+        url = url + "/" + action.payload.ID;
+      }
+    }
+    console.log(method);
+    const data = yield call(request, method, url, action.payload);
     yield call(getData);
     yield put(changeNotifStatus({
       open: true,
@@ -60,7 +69,7 @@ export function* getData() {
 }
 
 /**
- * Delete Unit Data
+ * Delete Goods Type Data
  */
  export function* deleteData(action) {
   try {

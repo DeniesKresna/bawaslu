@@ -1,6 +1,6 @@
 /**
  *
- * UnitPage
+ * RoomPage
  *
  */
 
@@ -29,10 +29,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 
-export function UnitPage({ data, search, onGetData, onChangeSearch, onChangeData, onChangeRow, onDeleteRow }) {
-  useInjectReducer({ key: 'unitPage', reducer });
-  useInjectSaga({ key: 'unitPage', saga });
-  const entity = "Satuan";
+export function RoomPage({ data, search, onGetData, onChangeSearch, onChangeData, onChangeRow, onDeleteRow }) {
+  useInjectReducer({ key: 'roomPage', reducer });
+  useInjectSaga({ key: 'roomPage', saga });
+  const entity = "Ruangan";
 
   const delayedGetData = useCallback(debounce(onGetData, 2000), []); 
   useEffect(() => {
@@ -168,7 +168,7 @@ export function UnitPage({ data, search, onGetData, onChangeSearch, onChangeData
   );
 }
 
-UnitPage.propTypes = {
+RoomPage.propTypes = {
   data: PropTypes.object,
   search: PropTypes.string,
   onGetData: PropTypes.func,
@@ -201,4 +201,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(UnitPage);
+)(RoomPage);
