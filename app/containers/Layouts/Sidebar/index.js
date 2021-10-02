@@ -34,6 +34,7 @@ import EventSeatIcon from '@material-ui/icons/EventSeat';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
+import BrokenImageIcon from '@material-ui/icons/BrokenImage';
 
 const useStyles = makeStyles((theme) => ({
   nested: {
@@ -60,29 +61,11 @@ export function Sidebar() {
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <ShoppingCartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Orders" />
-      </ListItem>
-      <ListItem button>
+      <ListItem button component={Link} to="/admin/inventory">
         <ListItemIcon>
           <PeopleIcon />
         </ListItemIcon>
-        <ListItemText primary="Customers" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Reports" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="Integrations" />
+        <ListItemText primary="Inventaris" />
       </ListItem>
       <ListItem button onClick={handleSettingClick}>
         <ListItemIcon>
@@ -114,6 +97,14 @@ export function Sidebar() {
               <EventSeatIcon />
             </ListItemIcon>
             <ListItemText primary="Tipe Barang" />
+          </ListItem>
+        </List>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested} component={Link} to="/admin/condition">
+            <ListItemIcon>
+              <BrokenImageIcon />
+            </ListItemIcon>
+            <ListItemText primary="Kondisi" />
           </ListItem>
         </List>
       </Collapse>

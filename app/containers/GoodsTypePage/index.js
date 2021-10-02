@@ -44,11 +44,9 @@ export function GoodsTypePage({ data, search, onGetData, onChangeSearch, onChang
   const [form, setForm] = useState({});
 
   const handleCloseDialog = (md='cancel') => {
-    if(md == 'cancel')
-      setForm({});
-    else{
+    if(md != 'cancel')
       onChangeRow(form);
-    }
+    setForm({});
     setDialogStatus(false);
   };
 

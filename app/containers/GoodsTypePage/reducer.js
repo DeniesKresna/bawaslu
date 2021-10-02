@@ -4,7 +4,7 @@
  *
  */
 import produce from 'immer';
-import { CHANGE_SEARCH, GET_DATA_SUCCESS } from './constants';
+import { CHANGE_SEARCH, GET_DATA_SUCCESS, GET_LIST_SUCCESS  } from './constants';
 
 export const initialState = {
   data: {
@@ -14,7 +14,8 @@ export const initialState = {
     last_page: 0,
     per_page: 10,
     to: 0,
-    total: 0
+    total: 0,
+    list: []
   },
   search: '',
   row: {}
@@ -29,6 +30,9 @@ const goodsTypeReducer = (state = initialState, action) =>
         break;
       case CHANGE_SEARCH:
         draft.search = action.payload;
+        break;
+      case GET_LIST_SUCCESS:
+        draft.list = action.payload;
         break;
     }
   });

@@ -2,8 +2,8 @@
 import { call, select, put, takeLatest } from '@redux-saga/core/effects';
 import request from '../../utils/api';
 import { makeSelectData, makeSelectSearch } from './selectors';
-import { getDataSuccess, getDataFailed } from './actions';
-import { GET_DATA, CHANGE_DATA, CHANGE_ROW, DELETE_ROW } from './constants';
+import { getDataSuccess, getListSuccess } from './actions';
+import { GET_DATA, CHANGE_DATA, CHANGE_ROW, DELETE_ROW, GET_LIST } from './constants';
 import { changeNotifStatus, changeLoading } from '../Layouts/LayoutDashboard/actions';
 
 const key = 'goods-types';
@@ -47,7 +47,6 @@ export function* getData() {
         url = url + "/" + action.payload.ID;
       }
     }
-    console.log(method);
     const data = yield call(request, method, url, action.payload);
     yield call(getData);
     yield put(changeNotifStatus({
@@ -56,6 +55,27 @@ export function* getData() {
       message: data.Message,
       color: 'success'
     }));
+    yield put(changeLoading(false));
+  } catch (error) {
+    yield put(changeNotifStatus({
+      open: true,
+      title: 'Gagal',
+      message: error.Message,
+      color: 'error'
+    }));
+    yield put(changeLoading(false));
+  }
+}
+
+/**
+ * Get Condition List
+ */
+ export function* getList() {
+  try {
+    yield put(changeLoading(true));
+    const url = key + '/list';
+    const data = yield call(request, "GET", url);
+    yield put(getListSuccess(data.Data));
     yield put(changeLoading(false));
   } catch (error) {
     yield put(changeNotifStatus({
@@ -100,6 +120,7 @@ export function* getData() {
  */
  export default function* rootSaga() {
   yield takeLatest([GET_DATA, CHANGE_DATA], getData);
+  yield takeLatest([GET_LIST], getList);
   yield takeLatest([CHANGE_ROW], setData);
   yield takeLatest([DELETE_ROW], deleteData);
 }

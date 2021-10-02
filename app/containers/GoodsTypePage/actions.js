@@ -4,7 +4,7 @@
  *
  */
 
-import { CHANGE_DATA, CHANGE_SEARCH, GET_DATA, GET_DATA_SUCCESS, CHANGE_ROW, DELETE_ROW } from './constants';
+import { CHANGE_DATA, CHANGE_SEARCH, GET_DATA, GET_LIST, GET_LIST_SUCCESS, GET_DATA_SUCCESS, CHANGE_ROW, DELETE_ROW } from './constants';
 
 /**
  * Changes the entity data
@@ -46,6 +46,17 @@ export function changeData(payload) {
 }
 
 /**
+ * Get the entity list
+ *
+ * @return {object} An action object with a type of GET_LIST
+ */
+ export function getList() {
+  return {
+    type: GET_LIST,
+  };
+}
+
+/**
  * Get the entity data
  *
  * @param  {object} payload
@@ -55,6 +66,20 @@ export function changeData(payload) {
  export function getDataSuccess(payload) {
   return {
     type: GET_DATA_SUCCESS,
+    payload
+  };
+}
+
+/**
+ * Get the entity data
+ *
+ * @param  {object} payload
+ *
+ * @return {object} An action object with a type of GET_LIST_SUCCESS
+ */
+ export function getListSuccess(payload) {
+  return {
+    type: GET_LIST_SUCCESS,
     payload
   };
 }

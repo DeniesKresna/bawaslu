@@ -40,6 +40,30 @@ export const deepClone = (val) => {
 }
 
 /**
+ * Get string date time now
+ * 
+ * @return {string} the date time string
+ */
+ export const dateTimeNow = () => {
+    let d = new Date()
+    let str = "";
+    let mt = d.getMonth();
+    if(mt < 10)
+        mt = "0" + mt
+    let dt = d.getDate()
+    if(dt < 10)
+        dt = "0" + dt
+    let hr = d.getHours()
+    if(hr < 10)
+        hr = "0" + hr
+    let mn = d.getHours()
+    if(mn < 10)
+        mn = "0" + mn
+    str += d.getFullYear() + "-" + mt + "-" + dt + "T" + hr + ":" + mn;
+    return str;
+}
+
+/**
  * Normalize Data From Server for consumed in table
  *
  * @param {object} val
@@ -55,11 +79,26 @@ export const normalizeData = (val) => {
         i++;
         element.updated_at = readableDateHour(element.UpdatedAt);
         element.created_at = readableDateHour(element.CreatedAt);
-        if(element.DeletedAt != typeof ndefined){
+        if(element.DeletedAt != typeof undefined){
             if(element.DeletedAt != null){
                 element.deleted_at = readableDateHour(element.DeletedAt);
             }
         }
     });
     return dataList;
+}
+
+/**
+ * Get all query params from current url
+ * 
+ * @return {object} the query param object
+ */
+ export const getAllQueryParams = () => {
+    const url = window.location.search;
+    const params = new URLSearchParams(url);
+    let paramObj = {};
+    for(var value of params.keys()) {
+        paramObj[value] = params.get(value);
+    }
+    return paramObj;
 }
