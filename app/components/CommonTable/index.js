@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { useState, memo } from 'react';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
@@ -21,15 +21,23 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import PhotoIcon from '@material-ui/icons/Photo';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import red from '@material-ui/core/colors/red';
 import yellow from '@material-ui/core/colors/yellow';
 import green from '@material-ui/core/colors/green';
+
+import { serverBaseUrl } from '../../utils/api';
 
 const myRed = red[500];
 const myYellow = yellow[500];
@@ -67,35 +75,52 @@ const StyledTableContainer = withStyles((theme) => ({
 
 function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onChangeSearch, onChangePage, onChangeRowsPerPage, onOperationClick}) {
 
+  const [imageUrl, setImageUrl] = useState('');
+  const [dialogStatus, setDialogStatus] = useState(false);
+
   const renderHeadColumns = col => {
     switch(col){
       case 'Number':
         return <StyledTableCell key={col} align="right">#</StyledTableCell>
       case 'updater':
         return <StyledTableCell key={col} align="right">Pengupdate</StyledTableCell>
+      case 'updater_name':
+          return <StyledTableCell key={col} align="right">Pengupdate</StyledTableCell>
       case 'updated_at':
         return <StyledTableCell key={col} align="right">Diupdate pada</StyledTableCell>
       case 'operation':
         return <StyledTableCell key={col} align="right">Operasi</StyledTableCell>
       case 'name':
         return <StyledTableCell key={col} align="right">Nama</StyledTableCell>
+      case 'description':
+        return <StyledTableCell key={col} align="right">Keterangan</StyledTableCell>
+      case 'entity_type':
+        return <StyledTableCell key={col} align="right">Perubahan</StyledTableCell>
       case 'code':
         return <StyledTableCell key={col} align="right">Kode</StyledTableCell>
+      case 'image_url':
+        return <StyledTableCell key={col} align="right">Gambar</StyledTableCell>
       default:
         return <StyledTableCell key={col} align="right">{col}</StyledTableCell>
     }
   }
   
-  const renderRowColumns = (row,col, onOperationClick) => {
+  const renderRowColumns = (row,col, onOperationClick, imageAction=false) => {
     switch(col){
+      case 'entity_type':
+        return (<StyledTableCell key={col} align="right">
+          {row.entity_type == 'room'? "Pindah Ruangan ke "+row.entity_name:"Kondisi barang "+row.entity_name}
+        </StyledTableCell>)
       case 'updater':
         return <StyledTableCell key={col} align="right">{row.Updater.name}</StyledTableCell>
       case 'operation':
         return (
           <StyledTableCell key={col} align="right">
-            <StyledIconButton color="secondary" aria-label="lihat" onClick={()=>{onOperationClick('show',row)}}>
-              <VisibilityIcon fontSize="small" />
-            </StyledIconButton>
+            { row.hasOwnProperty('image_url') && 
+              <StyledIconButton color="secondary" aria-label="lihat gambar" onClick={()=>{showImage(row.image_url)}}>
+                <PhotoIcon fontSize="small" />
+              </StyledIconButton>
+            }
             {canBeUpdate && <StyledIconButton color="primary" aria-label="ubah" onClick={()=>{onOperationClick('edit',row)}}>
               <EditIcon fontSize="small" />
             </StyledIconButton>}
@@ -107,6 +132,15 @@ function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onCh
       default:
         return <StyledTableCell key={col} align="right">{row[col]}</StyledTableCell>
     }
+  }
+
+  const showImage = (val) => {
+    setImageUrl(val);
+    setDialogStatus(true);
+  }
+
+  const handleCloseDialog = () => {
+    setDialogStatus(false);
   }
 
   return (
@@ -166,6 +200,17 @@ function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onCh
           </TableFooter>
         </Table>
       </StyledTableContainer>
+      <Dialog open={dialogStatus} onClose={handleCloseDialog} maxWidth='lg' aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Gambar</DialogTitle>
+        <DialogContent>
+          <img src={serverBaseUrl + 'medias?path=' + imageUrl} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="secondary">
+            Tutup
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }

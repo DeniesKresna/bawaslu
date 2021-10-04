@@ -21,7 +21,7 @@ import Assignment from '@material-ui/icons/Assignment';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 function InventoryDetailForm({
-  goBack, rowData, unitList, roomList, conditionList, goodsTypeList, onSubmitForm, entityMode
+  title, goBack, rowData, unitList, roomList, conditionList, goodsTypeList, onSubmitForm, entityMode
 }) {
 
   let rowDataCopy = JSON.parse(JSON.stringify(rowData));
@@ -34,7 +34,6 @@ function InventoryDetailForm({
   const [quantity, setQuantity] = useState({value:rowDataCopy.quantity, error: false, helperText: ''});
   const [price, setPrice] = useState({value:rowDataCopy.price, error: false, helperText: ''});
   const [room, setRoom] = useState({value:rowDataCopy.RoomID, error: false, helperText: ''});
-  const [condition, setCondition] = useState({value:rowDataCopy.ConditionID, error: false, helperText: ''});
   const [image, setImage] = useState({value:'', error: false, helperText: ''});
   const [imageUrl, setImageUrl] = useState(rowDataCopy.imageUrl != ""?serverBaseUrl + 'medias?path=' + rowDataCopy.imageUrl:null);
   const [imageReceive, setImageReceive] = useState({value:'', error: false, helperText: ''});
@@ -63,7 +62,7 @@ function InventoryDetailForm({
   }
 
   const handleSubmitForm = (md) => {
-    const result = {}
+    let result = {}
     if(name.value != null)
       result.name = name.value
     if(code.value != null)
@@ -213,20 +212,6 @@ function InventoryDetailForm({
     setRoom(field);
   }
 
-  const onChangeCondition = (event, newValue) => {
-    const inputValue = newValue
-    let field = {...condition}
-    if(inputValue == null){
-      field.error = true,
-      field.helperText = "wajib diisi"
-    }else{
-      field.error = false,
-      field.helperText = ""
-    }
-    field.value = inputValue.ID
-    setCondition(field);
-  }
-
   const onChangeImage = (event) => {
     const inputValue = event.target.files[0];
     let field = {}
@@ -334,39 +319,40 @@ function InventoryDetailForm({
 
   return (
     <div>
+      <h3>{title}</h3>
       <Grid container spacing={5}>
-        <Grid item md={6}>
+        <Grid item md={12}>
           <TextField label='Nama' value={name.value || ''} onChange={onChangeName} error={name.error} helperText={name.helperText} fullWidth/>
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={12}>
           <Autocomplete options={goodsTypeList} getOptionLabel={(option) => option.name || ''} value={findObjectById(goodsTypeList, code.value)}
            getOptionSelected={(option, value) => option.ID === value.ID || {}} onChange={onChangeCode}
             renderInput={(params) => <TextField {...params} label='Tipe' error={code.error} helperText={code.helperText} fullWidth />}
           />
         </Grid>
-        <Grid item md={2}>
+        <Grid item md={5}>
           <TextField label='NUP' value={nup.value || ''} onChange={onChangeNup} error={nup.error} helperText={nup.helperText} type="number" fullWidth />
         </Grid>
-        <Grid item md={4}>
+        <Grid item md={7}>
           <Autocomplete options={yearList} getOptionLabel={(option) => option.name || ''} value={findObjectById(yearList, year.value)}
            getOptionSelected={(option, value) => option.ID === value.ID || {}} onChange={onChangeYear}
             renderInput={(params) => <TextField {...params} label='Tahun' error={year.error} helperText={year.helperText} fullWidth />}
           />
         </Grid>
-        <Grid item md={3}>
+        <Grid item md={12}>
           <Autocomplete options={unitList} getOptionLabel={(option) => option.name || ''} value={findObjectById(unitList, unit.value)}
            getOptionSelected={(option, value) => option.ID === value.ID || {}} onChange={onChangeUnit}
             renderInput={(params) => <TextField {...params} label='Satuan' error={unit.error} helperText={unit.helperText} fullWidth />}
           />
         </Grid>
-        <Grid item md={3}>
+        <Grid item md={6}>
           <TextField label='Jumlah' value={quantity.value || ''} onChange={onChangeQuantity} type="number" error={quantity.error} helperText={quantity.helperText} fullWidth />
         </Grid>
         <Grid item md={6}>
           <TextField label='Harga Satuan' value={price.value || ''} onChange={onChangePrice} type="number" error={price.error} helperText={price.helperText} fullWidth />
         </Grid>
         { entityMode == "create" &&
-          <Grid item md={6}>
+          <Grid item md={12}>
             <Autocomplete options={roomList} getOptionLabel={(option) => option.name || ''} value={findObjectById(roomList, room.value)}
               getOptionSelected={(option, value) => option.ID === value.ID || {}} onChange={onChangeRoom}
                 renderInput={(params) => <TextField {...params} label='Ruangan' error={room.error} helperText={room.helperText} fullWidth />}
@@ -374,7 +360,7 @@ function InventoryDetailForm({
           </Grid>
         }
         { entityMode == "create" &&
-          <Grid item md={6}>
+          <Grid item md={12}>
             <TextField label='Tanggal Pengadaan' onChange={onChangeMoveTime} type="datetime-local" error={moveTime.error} helperText={moveTime.helperText} 
             value={moveTime.value} InputLabelProps={{shrink: true}} fullWidth />
           </Grid>
@@ -447,6 +433,7 @@ function InventoryDetailForm({
 }
 
 InventoryDetailForm.propTypes = {
+  title: PropTypes.string,
   goBack: PropTypes.func,
   rowData: PropTypes.object,
   tableData: PropTypes.object,

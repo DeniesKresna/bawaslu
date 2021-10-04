@@ -44,6 +44,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
 import InventoryDetailForm from '../../../components/Forms/InventoryDetailForm'
+import HistoryPage from './../HistoryPage'
 
 import './style.css';
 
@@ -190,22 +191,21 @@ export function InventoryDetailPage({ history, rowData, goodsTypeList, unitList,
         <title>{entity}</title>
         <meta name="description" content="Pengaturan Barang Inventaris" />
       </Helmet>
-      <h1>{formLabel()} {entity}</h1>
       <Grid container spacing={5}>
-        <Grid item md={6}>
+        <Grid item md={4}>
           { !isBusy &&
-          <InventoryDetailForm goBack={goBack} rowData={rowData} unitList={unitList} roomList={roomList} conditionList={conditionList} goodsTypeList={goodsTypeList} 
+          <InventoryDetailForm goBack={goBack} title={formLabel() + entity} rowData={rowData} unitList={unitList} roomList={roomList} conditionList={conditionList} goodsTypeList={goodsTypeList} 
             onSubmitForm={handleSubmitForm} entityMode={entityMode}
           />
           }
         </Grid>
-        <Grid item md={5}>
-          <Button onClick={()=>{handleCreateHistory('move')}} variant="contained" color="secondary">
-            Pindah Barang
-          </Button>
-          <Button onClick={()=>{handleCreateHistory('condition')}} variant="contained" color="primary" style={{marginLeft: "5px"}}>
-            Atur Kondisi
-          </Button>
+        <Grid item md={8}>
+          { (!isBusy && rowData.hasOwnProperty("ID")) &&
+            <div>
+              <h3>Perubahan Kondisi Barang</h3>
+              <HistoryPage roomList={roomList} conditionList={conditionList} inventoryId={rowData.ID} />
+            </div>
+          }
         </Grid>
       </Grid>
       <Dialog open={dialogHistoryStatus} onClose={()=>{handleCloseDialogHistory('cancel')}} maxWidth='lg' aria-labelledby="form-dialog-title">
@@ -217,14 +217,6 @@ export function InventoryDetailPage({ history, rowData, goodsTypeList, unitList,
           updateForm={(key, value) => updateHistoryForm(key, value)}
         />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={()=>{handleCloseDialogHistory('cancel')}} color="secondary">
-            Tutup
-          </Button>
-          {entityMode != 'show' && <Button onClick={()=>{handleCloseDialogHistory('submit')}} color="primary">
-            Simpan
-          </Button>}
-        </DialogActions>
       </Dialog>
     </div>
   );
