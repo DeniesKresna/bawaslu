@@ -23,20 +23,27 @@ function HistoryDetailForm({
 }) {
 
   let rowDataCopy = JSON.parse(JSON.stringify(rowData));
+  const getHistoryTime = () => {
+    if(rowDataCopy.hasOwnProperty('history_time')){
+      return rowDataCopy.history_time.substring(0,16)
+    }else{
+      return dateTimeNow()
+    }
+  }
 
-  const [entityType, setEntityType] = useState({value: 'room', error: false, helperText: ''});
+  const [entityType, setEntityType] = useState({value:rowDataCopy.entity_type, error: false, helperText: ''});
   const [entityId, setEntityId] = useState({value:rowDataCopy.EntityID, error: false, helperText: ''});
   const [image, setImage] = useState({value:'', error: false, helperText: ''});
-  const [imageUrl, setImageUrl] = useState(rowDataCopy.imageUrl != ""?serverBaseUrl + 'medias?path=' + rowDataCopy.imageUrl:null);
-  const [description, setDescription] = useState({value:'', error:false, helperText: ''})
-  const [moveTime, setMoveTime] = useState({value:dateTimeNow(), error:false, helperText: ''})
+  const [imageUrl, setImageUrl] = useState(rowDataCopy.image_url != ""?serverBaseUrl + 'medias?path=' + rowDataCopy.image_url:null);
+  const [description, setDescription] = useState({value:rowDataCopy.description, error:false, helperText: ''})
+  const [moveTime, setMoveTime] = useState({value:getHistoryTime(), error:false, helperText: ''})
   
   const handleSubmitForm = (md) => {
     let result = {}
     if(entityId.value != null)
       result.EntityID = parseInt(entityId.value)
     if(entityType.value != null)
-      result.EntityType = entityType.value
+      result.entity_type = entityType.value
     if(image.value != null)
       result.image = image.value
     if(description.value != null)
@@ -47,6 +54,8 @@ function HistoryDetailForm({
     if(rowData.hasOwnProperty('ID')){
       result.ID = rowData.ID
     }
+    result.InventoryID = rowDataCopy.InventoryID
+
     console.log(result)
     onSubmitForm(md, result)
   }

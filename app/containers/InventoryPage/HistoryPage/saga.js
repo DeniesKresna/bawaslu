@@ -17,7 +17,6 @@ export function* getData(action) {
     const oldData = yield select(makeSelectData());
     const search = yield select(makeSelectSearch());
     const url = 'histories/inventoryid/' + action.payload + '?search=' + search + '&page=' + oldData.current_page + '&page_size=' + oldData.per_page;
-    console.log(url);
     const data = yield call(request, "GET", url);
     yield put(getDataSuccess(data.Data));
     yield put(changeLoading(false));
@@ -38,9 +37,20 @@ export function* getData(action) {
  export function* setData(action) {
   try {
     yield put(changeLoading(true));
-    const url = key;
-    const data = yield call(request, "POST", url, action.payload);
-    yield call(getData);
+    let url = key;
+
+    let method = "POST";
+    if(action.payload.ID !== undefined ){
+      if(action.payload.ID != null){
+        url = url + "/" + action.payload.ID;
+      }
+    }
+    const formData = new FormData();
+    for (const key in action.payload){
+      formData.append(key, action.payload[key]);
+    }
+    const data = yield call(request, method, url, formData);
+    yield call(getData, {payload: action.payload.InventoryID});
     yield put(changeNotifStatus({
       open: true,
       title: 'Sukses',

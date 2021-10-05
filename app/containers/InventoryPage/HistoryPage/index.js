@@ -32,7 +32,6 @@ import Button from '@material-ui/core/Button';
 export function HistoryPage({ inventoryId, roomList, conditionList, data, search, onGetData, onChangeSearch, onChangeData, onChangeRow, onDeleteRow }) {
   useInjectReducer({ key: 'historyPage', reducer });
   useInjectSaga({ key: 'historyPage', saga });
-  const entity = "Timeline Kondisi";
 
   const delayedGetData = useCallback(debounce(onGetData, 2000), []); 
   useEffect(() => {
@@ -44,12 +43,16 @@ export function HistoryPage({ inventoryId, roomList, conditionList, data, search
   const [form, setForm] = useState({});
 
   const handleCloseDialog = (md='cancel', res=null) => {
-    if(md == 'cancel')
+    if(md == 'cancel'){
       setForm({});
-    else
-      console.log(res);
-      //onChangeRow(res);
-    setDialogStatus(false);
+      setDialogStatus(false);
+    }
+    else{
+      setForm(res);
+      onChangeRow(res);
+      onGetData(inventoryId);
+      setDialogStatus(false);
+    }
   };
 
   const tableData = normalizeData(data);
@@ -77,7 +80,7 @@ export function HistoryPage({ inventoryId, roomList, conditionList, data, search
       setForm(rowData);
     }else{
       setEntityMode("create");
-      setForm({});
+      setForm({InventoryID: inventoryId});
     }
     if(mode == 'delete'){
       if(confirm("Hapus "+entity+" ini?")){
@@ -106,7 +109,6 @@ export function HistoryPage({ inventoryId, roomList, conditionList, data, search
   return (
     <div>
       <Helmet>
-        <title>{entity}</title>
         <meta name="description" content="Pengaturan Barang Inventaris" />
       </Helmet>
 
