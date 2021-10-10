@@ -145,7 +145,7 @@ export function LoginPage({ onGetUser, message, isLoading }) {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
+                    <Link href="https://wa.me/+6283863980461" target="_blank" variant="body2">
                       Masalah Akun? Hubungi administrator
                     </Link>
                   </Grid>

@@ -4,7 +4,7 @@
  *
  */
 
-import { CHANGE_NOTIF_STATUS, SET_LOADING } from './constants';
+import { CHANGE_NOTIF_STATUS, SET_LOADING, CHANGE_PASSWORD } from './constants';
 
 /**
  * Changes the notif object
@@ -30,6 +30,20 @@ export function changeNotifStatus(payload) {
  export function changeLoading(payload) {
   return {
     type: SET_LOADING,
+    payload
+  };
+}
+
+/**
+ * Changes user password
+ *
+ * @param  {boolean} payload The password parameter
+ *
+ * @return {object} An action object with a type of CHANGE_PASSWORD
+ */
+ export function changePassword(payload) {
+  return {
+    type: CHANGE_PASSWORD,
     payload
   };
 }

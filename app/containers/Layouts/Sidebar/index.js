@@ -24,17 +24,16 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import HelpIcon from '@material-ui/icons/Help';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 import SettingsIcon from '@material-ui/icons/Settings';
+import PeopleIcon from '@material-ui/icons/People';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import HomeWorkIcon from '@material-ui/icons/HomeWork';
 import EventSeatIcon from '@material-ui/icons/EventSeat';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
+import AmpStoriesIcon from '@material-ui/icons/AmpStories';
 import BrokenImageIcon from '@material-ui/icons/BrokenImage';
 
 const useStyles = makeStyles((theme) => ({
@@ -56,7 +55,7 @@ export function Sidebar() {
 
   return (
     <div>
-      <ListItem button component={Link} to="/admin/">
+      <ListItem button component={Link} to="/admin/home">
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
@@ -64,7 +63,7 @@ export function Sidebar() {
       </ListItem>
       <ListItem button component={Link} to="/admin/inventory">
         <ListItemIcon>
-          <PeopleIcon />
+          <AmpStoriesIcon />
         </ListItemIcon>
         <ListItemText primary="Inventaris" />
       </ListItem>
@@ -114,7 +113,21 @@ export function Sidebar() {
             <ListItemText primary="Kondisi" />
           </ListItem>
         </List>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested} component={Link} to="/admin/user">
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Pengguna" />
+          </ListItem>
+        </List>
       </Collapse>
+      <ListItem button>
+        <ListItemIcon>
+          <HelpIcon />
+        </ListItemIcon>
+        <ListItemText primary="Help Desk" />
+      </ListItem>
     </div>
   );
 }

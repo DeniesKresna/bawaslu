@@ -12,11 +12,12 @@ import { Route } from 'react-router-dom'
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import _, { debounce } from 'lodash';
+import FormBuilder from "@jeremyling/react-material-ui-form-builder";
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { makeSelectData, makeSelectSearch } from './selectors';
-import { changeSearch, changeData, getData, deleteRow } from './actions';
+import { makeSelectData, makeSelectSearch, makeSelectRoles } from './selectors';
+import { changeSearch, changeData, getData, getRoles, deleteRow, changeRow, resetRow } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 
@@ -39,13 +40,17 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import red from '@material-ui/core/colors/red';
 import yellow from '@material-ui/core/colors/yellow';
 import green from '@material-ui/core/colors/green';
-
-import InventoryDetailDialogPage from './InventoryDetailDialogPage';
 
 const myRed = red[500];
 const myYellow = yellow[500];
@@ -81,21 +86,26 @@ const StyledTableContainer = withStyles((theme) => ({
   },
 }))(TableContainer);
 
-export function InventoryPage({ history, data, search, onGetData, onChangeSearch, onChangeData, onDeleteRow }) {
-  useInjectReducer({ key: 'inventoryPage', reducer });
-  useInjectSaga({ key: 'inventoryPage', saga });
-  const entity = "Inventaris";
+export function InventoryPage({ data, roles, search, onGetData, onGetRoles, onChangeSearch, onChangeData, onChangeRow, onDeleteRow, onResetRow }) {
+  useInjectReducer({ key: 'userPage', reducer });
+  useInjectSaga({ key: 'userPage', saga });
+  const entity = "Pengguna";
 
   const delayedGetData = useCallback(debounce(onGetData, 2000), []); 
   useEffect(() => {
     onGetData();
+    onGetRoles();
   }, []);
 
   const [dialogStatus, setDialogStatus] = useState(false);
   const [entityMode, setEntityMode] = useState('create');
-  const [inventoryId, setInventoryId] = useState(null);
+  const [form, setForm] = useState({});
 
   const handleCloseDialog = (md='cancel') => {
+    if(md == 'cancel')
+      setForm({});
+    else
+      onChangeRow(form);
     setDialogStatus(false);
   };
 
@@ -118,25 +128,132 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
 
   const handleClickOperation = (mode, rowData=null) => {
     setEntityMode(mode);
+    if(rowData != null){
+      setForm(rowData);
+    }
     if(mode == 'delete'){
       if(confirm("Hapus "+entity+" ini?")){
         onDeleteRow(rowData);
       }
-    }else if(mode == 'edit'){
-      history.push("/admin/inventory/detail?code="+rowData.GoodsType.ID+"&nup="+rowData.nup)
-    }else if(mode == 'create'){
-      history.push("/admin/inventory/create")
+    }else if(mode == 'reset'){
+      if(confirm("Reset Password "+entity+" ini?")){
+        onResetRow(rowData);
+      }
+    }else if(mode == 'edit' || mode == 'create'){
+      setDialogStatus(true)
     }else{
-      setInventoryId(rowData.ID)
       setDialogStatus(true)
     }
+  }
+
+  const updateForm = (key, value) => {
+    const copy = JSON.parse(JSON.stringify(form));
+    _.set(copy, key, value);
+    setForm(copy);
+  };
+
+  const formComponents = () => {
+    let disabled = false;
+    disabled = entityMode == 'show';
+    return ([
+      {
+        component: "text-field",
+        attribute: "name",
+        label: "Nama",
+        props:{
+          InputProps: {
+            readOnly: disabled
+          }
+        },
+        validationType: "string",
+        validations: {
+          required: true,
+          max: 50,
+        },
+      },
+      {
+        component: "text-field",
+        attribute: "username",
+        label: "Nama Pengguna",
+        props:{
+          InputProps: {
+            readOnly: disabled
+          }
+        },
+        validationType: "string",
+        validations: {
+          required: true,
+          max: 50,
+        },
+      },
+      {
+        component: "text-field",
+        attribute: "email",
+        label: "Email",
+        props:{
+          InputProps: {
+            readOnly: disabled
+          }
+        },
+        validationType: "string",
+        validations: {
+          required: true,
+          max: 50,
+        },
+      },
+      {
+        component: "text-field",
+        attribute: "phone",
+        label: "Telepon",
+        props:{
+          InputProps: {
+            readOnly: disabled
+          }
+        },
+        validationType: "string",
+        validations: {
+          required: true,
+          max: 50,
+        },
+      },
+      {
+        attribute: "RoleID",
+        label: "Role",
+        component: "select",
+        options: roles,
+        // If options is an array of objects, optionConfig is required
+        optionConfig: {
+          key: "ID", // The attribute to use for the key required for each option
+          value: "ID", // The attribute to use to determine the value that should be passed to the form field
+          label: "name", // The attribute to use to determine the label for the select option
+        },
+        props: {
+          value: form.RoleID
+        }
+      },
+    ]);
+  }
+
+  const formLabel = () => {
+    let label = "";
+    switch(entityMode) {
+      case 'edit':
+        label = "Ubah";
+        break;
+      case 'show':
+        label = "Lihat";
+        break;
+      default: 
+        label = "Tambah";
+    }
+    return label + " " + entity;
   }
 
   return (
     <div>
       <Helmet>
         <title>{entity}</title>
-        <meta name="description" content="Pengaturan Barang Inventaris" />
+        <meta name="description" content="Pengaturan Pengguna Aplikasi" />
       </Helmet>
       <h1>Halaman {entity}</h1>
 
@@ -164,13 +281,10 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
             <TableRow>
               <StyledTableCell align="center">#</StyledTableCell>
               <StyledTableCell align="center">Nama</StyledTableCell>
-              <StyledTableCell align="center">Tipe</StyledTableCell>
-              <StyledTableCell align="center">Kode</StyledTableCell>
-              <StyledTableCell align="center">Satuan</StyledTableCell>
-              <StyledTableCell align="center">Kuantitas</StyledTableCell>
-              <StyledTableCell align="center">Harga</StyledTableCell>
-              <StyledTableCell align="center">Kondisi</StyledTableCell>
-              <StyledTableCell align="center">Ruang</StyledTableCell>
+              <StyledTableCell align="center">Nama Pengguna</StyledTableCell>
+              <StyledTableCell align="center">Email</StyledTableCell>
+              <StyledTableCell align="center">Telepon</StyledTableCell>
+              <StyledTableCell align="center">Role</StyledTableCell>
               <StyledTableCell align="center">Operasi</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -179,16 +293,13 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
               <StyledTableRow key={row.ID}>
                 <StyledTableCell align="center">{row.Number}</StyledTableCell>
                 <StyledTableCell align="center">{row.name}</StyledTableCell>
-                <StyledTableCell align="center">{row.GoodsType != null && row.GoodsType.name}</StyledTableCell>
-                <StyledTableCell align="center">{row.GoodsType != null && (row.GoodsType.code + row.nup.toString()) }</StyledTableCell>
-                <StyledTableCell align="center">{row.Unit != null && row.Unit.name}</StyledTableCell>
-                <StyledTableCell align="center">{row.quantity}</StyledTableCell>
-                <StyledTableCell align="center">{row.price}</StyledTableCell>
-                <StyledTableCell align="center">{row.Conditions.length > 0 && row.Conditions[0].Condition.name}</StyledTableCell>
-                <StyledTableCell align="center">{row.Rooms.length > 0 && row.Rooms[0].Room.name}</StyledTableCell>
+                <StyledTableCell align="center">{row.username}</StyledTableCell>
+                <StyledTableCell align="center">{row.email}</StyledTableCell>
+                <StyledTableCell align="center">{row.phone}</StyledTableCell>
+                <StyledTableCell align="center">{row.Role != null && row.Role.name}</StyledTableCell>
                 <StyledTableCell align="center">
-                  <StyledIconButton color="secondary" aria-label="lihat" onClick={()=>{handleClickOperation('show',row)}}>
-                    <VisibilityIcon fontSize="small" />
+                  <StyledIconButton color="secondary" aria-label="reset" onClick={()=>{handleClickOperation('reset',row)}}>
+                    <LockOpenIcon fontSize="small" />
                   </StyledIconButton>
                   <StyledIconButton color="primary" aria-label="ubah" onClick={()=>{handleClickOperation('edit',row)}}>
                     <EditIcon fontSize="small" />
@@ -220,33 +331,57 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
           </TableFooter>
         </Table>
       </StyledTableContainer>
+      <Dialog open={dialogStatus} onClose={()=>{handleCloseDialog('cancel')}} maxWidth='lg' fullWidth={true} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">{formLabel()}</DialogTitle>
+        <DialogContent>
+        <FormBuilder
+          fields={formComponents()}
+          form={form}
+          updateForm={(key, value) => updateForm(key, value)}
+        />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>{handleCloseDialog('cancel')}} color="secondary">
+            Tutup
+          </Button>
+          {entityMode != 'show' && <Button onClick={()=>{handleCloseDialog('submit')}} color="primary">
+            Simpan
+          </Button>}
+        </DialogActions>
+      </Dialog>
     </div>
-    { inventoryId != null && <InventoryDetailDialogPage id={inventoryId} onHandleCloseDialog={handleCloseDialog} dialogStatus={dialogStatus} />
-    }
     </div>
   );
 }
 
 InventoryPage.propTypes = {
   data: PropTypes.object,
+  roles: PropTypes.array,
   search: PropTypes.string,
+  onGetRoles: PropTypes.func,
   onGetData: PropTypes.func,
+  onChangeRow: PropTypes.func,
   onChangeSearch: PropTypes.func,
   onChangeData: PropTypes.func,
   onDeleteRow: PropTypes.func,
+  onResetRow: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   data: makeSelectData(),
-  search: makeSelectSearch()
+  search: makeSelectSearch(),
+  roles: makeSelectRoles()
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     onChangeSearch: payload => dispatch(changeSearch(payload)),
     onChangeData: payload => dispatch(changeData(payload)),
+    onChangeRow: payload => dispatch(changeRow(payload)),
     onGetData: evt => dispatch(getData()),
-    onDeleteRow: payload => dispatch(deleteRow(payload))
+    onGetRoles: evt => dispatch(getRoles()),
+    onDeleteRow: payload => dispatch(deleteRow(payload)),
+    onResetRow: payload => dispatch(resetRow(payload))
   };
 }
 

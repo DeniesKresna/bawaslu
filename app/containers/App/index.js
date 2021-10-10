@@ -25,6 +25,7 @@ import UnitPage from '../UnitPage';
 import RoomPage from '../RoomPage';
 import GoodsTypePage from '../GoodsTypePage';
 import ConditionPage from '../ConditionPage';
+import UserPage from '../UserPage';
 
 import LoginPage from '../LoginPage';
 
@@ -51,6 +52,7 @@ export default function App() {
               <Route exact path="/admin/home" component={ HomePage } />
               <Route exact path="/admin/goods-type" component={ GoodsTypePage } />
               <Route exact path="/admin/condition" component={ ConditionPage } />
+              <Route exact path="/admin/user" component={ UserPage } />
               <Route exact path="/admin/inventory" component={ Inventory } />
               <Route exact path="/admin/inventory/create" component={ InventoryDetail } />
               <Route path="/admin/inventory/detail" component={ InventoryDetail } />

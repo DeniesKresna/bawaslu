@@ -24,7 +24,6 @@ import Typography from '@material-ui/core/Typography';
 function HistoryTimeline({
   historyData
 }) {
-  console.log(historyData)
   return (
     <div>
       <Timeline align="alternate">

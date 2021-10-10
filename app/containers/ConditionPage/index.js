@@ -96,7 +96,7 @@ export function ConditionPage({ data, search, onGetData, onChangeSearch, onChang
       {
         component: "text-field",
         attribute: "name",
-        label: "Name",
+        label: "Nama",
         props:{
           InputProps: {
             readOnly: disabled

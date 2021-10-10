@@ -1,7 +1,7 @@
 import axios from "axios";
 
-//export const serverBaseUrl = "https://16cd-36-74-155-33.ngrok.io/api/v1/";
-export const serverBaseUrl = "http://192.168.100.53:8090/api/v1/";
+//export const serverBaseUrl = "https://4da932dae911e7.lhr.domains/api/v1/";
+export const serverBaseUrl = "http://localhost:8090/api/v1/";
 /*
 const api = axios.create({
     baseURL: serverBaseUrl

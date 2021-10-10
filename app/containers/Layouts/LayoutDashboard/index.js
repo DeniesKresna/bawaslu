@@ -11,10 +11,12 @@ import { compose } from 'redux';
 import { Route } from 'react-router-dom'
 import { createStructuredSelector } from 'reselect';
 
+import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { makeSelectNotifStatus, makeSelectLoading } from './selectors';
-import { changeNotifStatus } from './actions';
+import { changeNotifStatus, changePassword } from './actions';
 import reducer from './reducer';
+import saga from './saga';
 
 import history from '../../../utils/history';
 
@@ -45,6 +47,14 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import LockIcon from '@material-ui/icons/Lock';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -182,12 +192,18 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-export function LayoutDashboard({ children, notifStatus, isLoading, onNotifChange }) {
+export function LayoutDashboard({ children, notifStatus, isLoading, onNotifChange, onChangePassword }) {
   useInjectReducer({ key: 'layoutDashboard', reducer });
+  useInjectSaga({ key: 'layoutDashboard', saga });
 
   const classes = useStyles();
+  const [dialogPasswordStatus, setDialogPasswordStatus] = useState(false);
   const [open, setOpen] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [oldPassword, setOldPassword] = useState({});
+  const [password1, setPassword1] = useState({});
+  const [password2, setPassword2] = useState({});
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -216,6 +232,57 @@ export function LayoutDashboard({ children, notifStatus, isLoading, onNotifChang
   const logout = () => {
     localStorage.clear();
     history.push("/login");
+  }
+
+  const handlePasswordClose = (md='cancel') => {
+    if(md != 'cancel'){
+      onChangePassword({
+        old_password: oldPassword.value,
+        password: password1.value
+      });
+    }else{
+      handleAccountClose();
+      setDialogPasswordStatus(false);
+    }
+  };
+
+  const handlePasswordOpen = () => {
+    setDialogPasswordStatus(true);
+  }
+
+  const handlePassword1Change = (event) => {
+    let vl = event.target.value
+    let field = {...password1}
+    if(vl.length < 8){
+      field.error = true;
+      field.description = "password minimal 8 karakter"
+    }else{
+      field.error = false;
+      field.description = ""
+    }
+    field.value = vl
+    setPassword1(field)
+  }
+
+  const handlePassword2Change = (event) => {
+    let vl = event.target.value
+    let field = {...password2}
+    if(vl != password1.value){
+      field.error = true;
+      field.description = "password tidak sama"
+    }else{
+      field.error = false;
+      field.description = ""
+    }
+    field.value = vl
+    setPassword2(field)
+  }
+
+  const handleOldPasswordChange = (event) => {
+    let vl = event.target.value
+    let field = {...oldPassword}
+    field.value = vl
+    setOldPassword(field)
   }
 
   return (
@@ -255,6 +322,12 @@ export function LayoutDashboard({ children, notifStatus, isLoading, onNotifChang
                   <ExitToAppIcon fontSize="small" onClick={()=>logout()} />
                 </ListItemIcon>
                 <ListItemText primary="Logout" onClick={()=>logout()} />
+              </StyledMenuItem>
+              <StyledMenuItem>
+                <ListItemIcon>
+                  <LockIcon fontSize="small" onClick={()=>handlePasswordOpen()} />
+                </ListItemIcon>
+                <ListItemText primary="Ganti Password" onClick={()=>handlePasswordOpen()} />
               </StyledMenuItem>
             </StyledMenu>
         </Toolbar>
@@ -297,6 +370,31 @@ export function LayoutDashboard({ children, notifStatus, isLoading, onNotifChang
           </Box>
         </Container>
       </main>
+      
+      <Dialog open={dialogPasswordStatus} onClose={()=>{handlePasswordClose('cancel')}} maxWidth='lg' fullWidth={true} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Ganti Password</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={5}>
+            <Grid item md={12}>
+              <TextField label='Password Lama' type="password" onChange={handleOldPasswordChange} error={oldPassword.error} helperText={oldPassword.description} fullWidth />
+            </Grid>
+            <Grid item md={12}>
+              <TextField label='Password Baru' type="password" onChange={handlePassword1Change} error={password1.error} helperText={password1.description} fullWidth />
+            </Grid>
+            <Grid item md={12}>
+              <TextField label='Konfirmasi Password' type="password" onChange={handlePassword2Change} error={password2.error} helperText={password2.description} fullWidth />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>{handlePasswordClose('cancel')}} color="secondary">
+            Tutup
+          </Button>
+          <Button disabled={password1.description!="" || password2.description !="" || password1.value.length == 0} onClick={()=>{handlePasswordClose('submit')}} color="primary">
+            Simpan
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
@@ -304,7 +402,8 @@ export function LayoutDashboard({ children, notifStatus, isLoading, onNotifChang
 LayoutDashboard.propTypes = {
   notifStatus: PropTypes.object,
   isLoading: PropTypes.bool,
-  onNotifChange: PropTypes.func
+  onNotifChange: PropTypes.func,
+  onChangePassword: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -315,6 +414,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     onNotifChange: payload => dispatch(changeNotifStatus(payload)),
+    onChangePassword: payload => dispatch(changePassword(payload))
   };
 }
 

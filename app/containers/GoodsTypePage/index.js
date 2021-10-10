@@ -95,7 +95,7 @@ export function GoodsTypePage({ data, search, onGetData, onChangeSearch, onChang
       {
         component: "text-field",
         attribute: "name",
-        label: "Name",
+        label: "Nama",
         col: {
           sm: 6
         },
@@ -113,7 +113,7 @@ export function GoodsTypePage({ data, search, onGetData, onChangeSearch, onChang
       {
         component: "text-field",
         attribute: "code",
-        label: "Code",
+        label: "Kode",
         col: {
           sm: 6
         },

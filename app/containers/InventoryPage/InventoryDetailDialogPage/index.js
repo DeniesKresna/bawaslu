@@ -41,7 +41,6 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
       onGetRowData(id);
   }, []);
 
-  console.log(rowData);
   return (
     <div>
       {!isBusy &&
