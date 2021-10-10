@@ -38,6 +38,7 @@ import yellow from '@material-ui/core/colors/yellow';
 import green from '@material-ui/core/colors/green';
 
 import { serverBaseUrl } from '../../utils/api';
+import { readableDateHour } from '../../utils/helpers';
 
 const myRed = red[500];
 const myYellow = yellow[500];
@@ -74,7 +75,7 @@ const StyledTableContainer = withStyles((theme) => ({
 }))(TableContainer);
 
 function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onChangeSearch, onChangePage, onChangeRowsPerPage, onOperationClick}) {
-
+  
   const [imageUrl, setImageUrl] = useState('');
   const [dialogStatus, setDialogStatus] = useState(false);
 
@@ -109,7 +110,7 @@ function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onCh
     switch(col){
       case 'entity_type':
         return (<StyledTableCell key={col} align="right">
-          {row.entity_type == 'room'? "Pindah Ruangan ke "+row.entity_name:"Kondisi barang "+row.entity_name}
+          {row.entity_type == 'room'? "Pindah Ruangan ke "+row.entity_name+" pada "+readableDateHour(row.history_time):"Kondisi barang "+row.entity_name+" pada "+readableDateHour(row.history_time)}
         </StyledTableCell>)
       case 'updater':
         return <StyledTableCell key={col} align="right">{row.Updater.name}</StyledTableCell>

@@ -45,6 +45,8 @@ import red from '@material-ui/core/colors/red';
 import yellow from '@material-ui/core/colors/yellow';
 import green from '@material-ui/core/colors/green';
 
+import InventoryDetailDialogPage from './InventoryDetailDialogPage';
+
 const myRed = red[500];
 const myYellow = yellow[500];
 const myGreen = green[500];
@@ -91,13 +93,13 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
 
   const [dialogStatus, setDialogStatus] = useState(false);
   const [entityMode, setEntityMode] = useState('create');
+  const [inventoryId, setInventoryId] = useState(null);
 
   const handleCloseDialog = (md='cancel') => {
     setDialogStatus(false);
   };
 
   const tableData = normalizeData(data);
-  console.log(data);
 
   const handleChangePage = (event, newPage) => {
     data.current_page = newPage;
@@ -124,6 +126,9 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
       history.push("/admin/inventory/detail?code="+rowData.GoodsType.ID+"&nup="+rowData.nup)
     }else if(mode == 'create'){
       history.push("/admin/inventory/create")
+    }else{
+      setInventoryId(rowData.ID)
+      setDialogStatus(true)
     }
   }
 
@@ -182,6 +187,9 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
                 <StyledTableCell align="center">{row.Conditions.length > 0 && row.Conditions[0].Condition.name}</StyledTableCell>
                 <StyledTableCell align="center">{row.Rooms.length > 0 && row.Rooms[0].Room.name}</StyledTableCell>
                 <StyledTableCell align="center">
+                  <StyledIconButton color="secondary" aria-label="lihat" onClick={()=>{handleClickOperation('show',row)}}>
+                    <VisibilityIcon fontSize="small" />
+                  </StyledIconButton>
                   <StyledIconButton color="primary" aria-label="ubah" onClick={()=>{handleClickOperation('edit',row)}}>
                     <EditIcon fontSize="small" />
                   </StyledIconButton>
@@ -213,7 +221,8 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
         </Table>
       </StyledTableContainer>
     </div>
-
+    { inventoryId != null && <InventoryDetailDialogPage id={inventoryId} onHandleCloseDialog={handleCloseDialog} dialogStatus={dialogStatus} />
+    }
     </div>
   );
 }

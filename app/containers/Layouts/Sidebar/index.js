@@ -25,6 +25,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import CropFreeIcon from '@material-ui/icons/CropFree';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -66,6 +67,12 @@ export function Sidebar() {
           <PeopleIcon />
         </ListItemIcon>
         <ListItemText primary="Inventaris" />
+      </ListItem>
+      <ListItem button component={Link} to="/admin/barcode">
+        <ListItemIcon>
+          <CropFreeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Barcode" />
       </ListItem>
       <ListItem button onClick={handleSettingClick}>
         <ListItemIcon>

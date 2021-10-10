@@ -390,7 +390,7 @@ function InventoryDetailForm({
         </Grid>
         }
         {
-          (imageReceiveUrl != null && entityType == 'create') && <Grid item md={12}>
+          (imageReceiveUrl != null && entityMode == 'create') && <Grid item md={12}>
             <img src={imageReceiveUrl} height="200" />
           </Grid>
         }

@@ -9,17 +9,19 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-export function LayoutEmpty() {
-  return <div />;
+export function LayoutEmpty({ children }) {
+  return (
+    <div>
+      { children }
+    </div>
+    );
 }
 
 LayoutEmpty.propTypes = {
-  dispatch: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
   };
 }
 

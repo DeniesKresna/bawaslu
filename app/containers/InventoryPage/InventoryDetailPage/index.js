@@ -38,9 +38,6 @@ import conditionSaga from './../../ConditionPage/saga';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
 import InventoryDetailForm from '../../../components/Forms/InventoryDetailForm'
@@ -72,12 +69,14 @@ export function InventoryDetailPage({ history, rowData, goodsTypeList, unitList,
     if(Object.keys(urlParams).length !== 0){
       setEntityMode('edit');
       onGetRowData(urlParams);
+    }else{
+      setEntityMode('create');
+      rowData = {};
     }
   }, []);
 
   const handleSubmitForm = (md='cancel', data) => {
     if(md != 'cancel'){
-      console.log(data);
       onChangeRowData(data);
     }
   };
@@ -170,7 +169,6 @@ export function InventoryDetailPage({ history, rowData, goodsTypeList, unitList,
   const updateHistoryForm = (key, value) => {
     const copy = JSON.parse(JSON.stringify(historyForm));
     _.set(copy, key, value);
-    console.log(copy);
     setHistoryForm(copy);
   };
 

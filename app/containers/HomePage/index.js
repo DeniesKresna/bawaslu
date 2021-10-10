@@ -14,29 +14,41 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import makeSelectHomePage from './selectors';
+import { makeSelectUser } from '../LoginPage/selectors';
 import reducer from './reducer';
 import saga from './saga';
+import loginReducer from '../LoginPage/reducer';
+import loginSaga from '../LoginPage/saga';
 
-export function HomePage() {
+export function HomePage({user}) {
   useInjectReducer({ key: 'homePage', reducer });
   useInjectSaga({ key: 'homePage', saga });
-
+  useInjectReducer({ key: 'loginPage', reducer: loginReducer });
+  useInjectSaga({ key: 'loginPage', saga: loginSaga });
   return (
     <div>
       <Helmet>
-        <title>HomePage</title>
+        <title>Beranda</title>
         <meta name="description" content="Description of HomePage" />
       </Helmet>
+      <h1>Selamat Datang {user.name}</h1>
+      <p>Aplikasi ini digunakan untuk pengaturan Inventaris Bawaslu Yogyakarta. Anda dapat mempelajari aplikasi ini dengan cara:</p>
+      <ul>
+        <li>Mendownload Guide book di halaman help Desk</li>
+        <li>Menanyakan pada administrator tentang cara penggunaannya</li>
+      </ul>
+      <p>Jika anda berkenan, silakan isi kuesioner kami di halaman Help Desk untuk membantu kami memperbaiki sistem dengan lebih baik</p>
+      <p>Salam hangat.</p>
     </div>
   );
 }
 
 HomePage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  user: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
-  homePage: makeSelectHomePage(),
+  user: makeSelectUser(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -31,8 +31,20 @@ function HistoryDetailForm({
     }
   }
 
+  const getEntityId = () =>{
+    if(rowDataCopy.hasOwnProperty('entity_type')){
+      if(rowDataCopy.entity_type == 'room'){
+        return rowDataCopy.RoomID
+      }else{
+        return rowDataCopy.ConditionID
+      }
+    }else{
+      null
+    }
+  }
+
   const [entityType, setEntityType] = useState({value:rowDataCopy.entity_type, error: false, helperText: ''});
-  const [entityId, setEntityId] = useState({value:rowDataCopy.EntityID, error: false, helperText: ''});
+  const [entityId, setEntityId] = useState({value:getEntityId(), error: false, helperText: ''});
   const [image, setImage] = useState({value:'', error: false, helperText: ''});
   const [imageUrl, setImageUrl] = useState(rowDataCopy.image_url != ""?serverBaseUrl + 'medias?path=' + rowDataCopy.image_url:null);
   const [description, setDescription] = useState({value:rowDataCopy.description, error:false, helperText: ''})
@@ -55,8 +67,6 @@ function HistoryDetailForm({
       result.ID = rowData.ID
     }
     result.InventoryID = rowDataCopy.InventoryID
-
-    console.log(result)
     onSubmitForm(md, result)
   }
 
