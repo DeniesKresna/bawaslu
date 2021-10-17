@@ -1,33 +1,51 @@
-import React, { Component } from 'react';
-import Scanner from './Scanner';
-import Result from './Result';
+import React, {useState} from 'react'
+import PropTypes from 'prop-types';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize'
+import {ArrowBack} from '@material-ui/icons'
+import { Link } from "react-router-dom";
+import QrScan from 'react-qr-reader'
 
-class BarcodeScanner extends Component {
-  state = {
-    scanning: false,
-    results: []
-  }
+function BarcodeScanner({onHandleDetected}) {
 
-  _scan = () => {
-    this.setState({scanning: !this.state.scanning});
-  }
+    const [qrscan, setQrscan] = useState('No result');
+    const handleScan = data => {
+        if (data) {
+            setQrscan(data)
+            onHandleDetected(data)
+        }
+    }
+    const handleError = err => {
+    console.error(err)
+    }
 
-  _onDetected = (result) => {
-    this.setState({results: this.state.results.concat([result])});
-  }
-
-  render() {
     return (
       <div>
-          <button onClick={this._scan}>{this.state.scanning ? 'Stop' : 'Start'}</button>
-          <ul className="results">
-            {this.state.results.map((result, i) => (<Result key={result.codeResult.code + i} result={result} />))}
-          </ul>
-          {this.state.scanning ? <Scanner onDetected={this._onDetected}/> : null}
+            <div>
+                <span>QR Scanner</span>
+                
+                <center>
+                <div style={{marginTop:30}}>
+                    <QrScan
+                        delay={300}
+                        onError={handleError}
+                        onScan={handleScan}
+                        style={{ height: 240, width: 320 }}
+                    />
+                </div>
+                </center>
+
+                <TextareaAutosize
+                    style={{fontSize:18, width:320, height:100, marginTop:100}}
+                    maxRows={4}
+                    value={qrscan}
+                />
+            </div>
       </div>
-    )
+    );
   }
 
-}
-
-export default BarcodeScanner;
+  BarcodeScanner.propTypes = {
+    onHandleDetected: PropTypes.func,
+};
+  
+  export default BarcodeScanner;

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-//export const serverBaseUrl = "https://ed612d016a0270.lhr.domains/api/v1/";
+//export const serverBaseUrl = "https://9889535fb3f592.lhr.domains/api/v1/";
 export const serverBaseUrl = "http://localhost:8090/api/v1/";
 /*
 const api = axios.create({

@@ -2,27 +2,15 @@ import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
 /**
- * Direct selector to the unitPage state domain
+ * Direct selector to the barcodePage state domain
  */
 
-const selectUnitPageDomain = state => state.unitPage || initialState;
+const selectBarcodePageDomain = state => state.barcodePage || initialState;
 
 const makeSelectData = () =>
   createSelector(
-    selectUnitPageDomain,
+    selectBarcodePageDomain,
     substate => substate.data
   );
 
-const makeSelectSearch = () =>
-  createSelector(
-    selectUnitPageDomain,
-    substate => substate.search
-  );
-
-const makeSelectList = () =>
-  createSelector(
-    selectUnitPageDomain,
-    substate => substate.list
-  );
-
-export { makeSelectData, makeSelectSearch, makeSelectList };
+export { makeSelectData };

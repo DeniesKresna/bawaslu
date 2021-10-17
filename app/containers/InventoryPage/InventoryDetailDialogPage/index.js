@@ -110,6 +110,9 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
           </Grid>
         </DialogContent>
         <DialogActions>
+          <Button onClick={()=>{onHandleCloseDialog('edit',rowData)}} color="primary">
+            Ubah
+          </Button>
           <Button onClick={()=>{onHandleCloseDialog('cancel')}} color="secondary">
             Tutup
           </Button>

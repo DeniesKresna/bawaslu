@@ -96,7 +96,10 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
   const [entityMode, setEntityMode] = useState('create');
   const [inventoryId, setInventoryId] = useState(null);
 
-  const handleCloseDialog = (md='cancel') => {
+  const handleCloseDialog = (md='cancel', rowData=null) => {
+    if(md=='edit'){
+      history.push("/admin/inventory/detail?code="+rowData.GoodsType.ID+"&nup="+rowData.nup)
+    }
     setDialogStatus(false);
   };
 

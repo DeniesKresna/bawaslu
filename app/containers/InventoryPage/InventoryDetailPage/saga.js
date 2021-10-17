@@ -17,9 +17,11 @@ const key = 'inventories';
 export function* getData(action) {
   try {
     yield put(changeLoading(true));
-    const url = key + '/detail?goods-type-id=' + action.payload.code + '&nup=' + action.payload.nup;
-
-    const data = yield call(request, "GET", url);
+    const url = key + '-code/detail';
+    let payload = {...action.payload}
+    payload.nup = parseInt(payload.nup)
+    payload.goodsTypeId = parseInt(payload.code)
+    const data = yield call(request, "POST", url, payload);
     yield put(getRowDataSuccess(data.Data));
     yield put(changeLoading(false));
   } catch (error) {
