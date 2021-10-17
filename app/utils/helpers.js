@@ -74,17 +74,21 @@ export const normalizeData = (val) => {
     const dataList = deepClone(val);
     let i = 0;
     const fromIndex = val.from;
-    dataList.data.forEach(element => {
-        element.Number = fromIndex + i;
-        i++;
-        element.updated_at = readableDateHour(element.UpdatedAt);
-        element.created_at = readableDateHour(element.CreatedAt);
-        if(element.DeletedAt != typeof undefined){
-            if(element.DeletedAt != null){
-                element.deleted_at = readableDateHour(element.DeletedAt);
+    if(dataList.data != null){
+        dataList.data.forEach(element => {
+            element.Number = fromIndex + i;
+            i++;
+            element.updated_at = readableDateHour(element.UpdatedAt);
+            element.created_at = readableDateHour(element.CreatedAt);
+            if(element.DeletedAt != typeof undefined){
+                if(element.DeletedAt != null){
+                    element.deleted_at = readableDateHour(element.DeletedAt);
+                }
             }
-        }
-    });
+        });
+    }else{
+        dataList.data = []
+    }
     return dataList;
 }
 
@@ -102,3 +106,21 @@ export const normalizeData = (val) => {
     }
     return paramObj;
 }
+
+export const downloadDocs = (url) => {
+    fetch(url).then(response=>{
+      var disposition = response.headers["content-disposition"];
+      var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+      var matches = filenameRegex.exec(disposition);
+      let filename = "";
+      if (matches != null && matches[1]) { 
+        filename = matches[1].replace(/['"]/g, '');
+      }
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+    })
+  }

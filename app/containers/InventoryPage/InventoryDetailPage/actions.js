@@ -4,7 +4,18 @@
  *
  */
 
-import { CHANGE_ROW_DATA, GET_ROW_DATA, GET_ROW_DATA_SUCCESS, DELETE_ROW_DATA, CHANGE_HISTORY_DATA, GET_ADDITIONAL_DATA } from './constants';
+import { RESET, CHANGE_ROW_DATA, GET_ROW_DATA, GET_ROW_DATA_SUCCESS, DELETE_ROW_DATA, CHANGE_HISTORY_DATA, GET_ADDITIONAL_DATA } from './constants';
+
+/**
+ * reset the data
+ *
+ * @return {object} An action object with a type of CHANGE_ROW_DATA
+ */
+ export function reset(payload) {
+  return {
+    type: RESET,
+  };
+}
 
 /**
  * Changes the entity data

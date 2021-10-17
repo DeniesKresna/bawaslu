@@ -31,6 +31,8 @@ import Grid from '@material-ui/core/Grid';
 
 import HistoryTimeline from '../../../components/TimeLine/HistoryTimeline';
 
+import {downloadDocs} from '../../../utils/helpers'
+
 import './style.css';
 
 export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, rowData, onGetRowData, dialogStatus }) {
@@ -93,13 +95,13 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
                     Dokumen Pengadaan
                   </Grid>
                   <Grid item md={6}>
-                    : {rowData.hasOwnProperty('procurementDocUrl') && <a href={serverBaseUrl + "medias?path=" + rowData.procurementDocUrl}>Download</a> }
+                    : {rowData.hasOwnProperty('procurementDocUrl') && <a onClick={() => {downloadDocs(serverBaseUrl + "documents?path=" + rowData.procurementDocUrl)}}>Download</a> }
                   </Grid>
                   <Grid item md={6}>
                     Dokumen Penetapan Status
                   </Grid>
                   <Grid item md={6}>
-                    : {rowData.hasOwnProperty('statusDocUrl')&& <a href={serverBaseUrl + "medias?path=" + rowData.statusDocUrl}>Download</a> }
+                    : {rowData.hasOwnProperty('statusDocUrl')&& <a href={serverBaseUrl + "documents?path=" + rowData.statusDocUrl}>Download</a> }
                   </Grid>
                 </Grid>
             </Grid>

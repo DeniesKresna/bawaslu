@@ -128,7 +128,7 @@ export function InventoryPage({ data, roles, search, onGetData, onGetRoles, onCh
 
   const handleClickOperation = (mode, rowData=null) => {
     setEntityMode(mode);
-    if(rowData != null){
+    if(rowData != null && mode != 'create'){
       setForm(rowData);
     }
     if(mode == 'delete'){

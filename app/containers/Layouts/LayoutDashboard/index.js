@@ -300,7 +300,7 @@ export function LayoutDashboard({ children, notifStatus, isLoading, onNotifChang
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
+            SAMAWA
           </Typography>
           <IconButton color="inherit" onClick={handleAccountClick}>{/*}
             <Badge badgeContent={4} color="secondary">

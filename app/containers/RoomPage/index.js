@@ -71,7 +71,7 @@ export function RoomPage({ data, search, onGetData, onChangeSearch, onChangeData
 
   const handleClickOperation = (mode, rowData=null) => {
     setEntityMode(mode);
-    if(rowData != null){
+    if(rowData != null && mode != 'create'){
       setForm(rowData);
     }
     if(mode == 'delete'){

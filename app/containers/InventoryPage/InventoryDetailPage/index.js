@@ -19,7 +19,7 @@ import { getAllQueryParams } from '../../../utils/helpers';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { makeSelectRowData, makeSelectHistoryList, makeSelectIsBusy } from './selectors';
-import { changeRowData, getRowData, getAdditionalData, deleteRowData, changeHistoryData } from './actions';
+import { reset, changeRowData, getRowData, getAdditionalData, deleteRowData, changeHistoryData } from './actions';
 import { makeSelectList as makeSelectUnitList } from './../../UnitPage/selectors';
 import { makeSelectList as makeSelectRoomList } from './../../RoomPage/selectors';
 import { makeSelectList as makeSelectGoodsTypeList } from './../../GoodsTypePage/selectors';
@@ -45,7 +45,7 @@ import HistoryPage from './../HistoryPage'
 
 import './style.css';
 
-export function InventoryDetailPage({ history, rowData, goodsTypeList, unitList, roomList, conditionList, historyList, isBusy, onGetRowData, onGetAdditionalData, onChangeRowData, onDeleteRowData, onChangeHistoryData }) {
+export function InventoryDetailPage({ onReset, history, rowData, goodsTypeList, unitList, roomList, conditionList, historyList, isBusy, onGetRowData, onGetAdditionalData, onChangeRowData, onDeleteRowData, onChangeHistoryData }) {
   useInjectReducer({ key: 'inventoryDetailPage', reducer: reducer });
   useInjectSaga({ key: 'inventoryDetailPage', saga: saga });
   useInjectReducer({ key: 'unitPage', reducer: unitReducer });
@@ -66,12 +66,12 @@ export function InventoryDetailPage({ history, rowData, goodsTypeList, unitList,
   useEffect(() => {
     onGetAdditionalData();      
     const urlParams = getAllQueryParams();
+    
     if(Object.keys(urlParams).length !== 0){
       setEntityMode('edit');
       onGetRowData(urlParams);
     }else{
       setEntityMode('create');
-      rowData = {};
     }
   }, []);
 
@@ -192,13 +192,13 @@ export function InventoryDetailPage({ history, rowData, goodsTypeList, unitList,
       <Grid container spacing={5}>
         <Grid item md={4}>
           { !isBusy &&
-          <InventoryDetailForm goBack={goBack} title={formLabel() + entity} rowData={rowData} unitList={unitList} roomList={roomList} conditionList={conditionList} goodsTypeList={goodsTypeList} 
+          <InventoryDetailForm goBack={goBack} title={formLabel() + entity} rowData={entityMode=='edit'?rowData:{}} unitList={unitList} roomList={roomList} conditionList={conditionList} goodsTypeList={goodsTypeList} 
             onSubmitForm={handleSubmitForm} entityMode={entityMode}
           />
           }
         </Grid>
         <Grid item md={8}>
-          { (!isBusy && rowData.hasOwnProperty("ID")) &&
+          { (!isBusy && rowData.hasOwnProperty("ID")) && entityMode=='edit' &&
             <div>
               <h3>Perubahan Kondisi Barang</h3>
               <HistoryPage roomList={roomList} conditionList={conditionList} inventoryId={rowData.ID} />
@@ -232,6 +232,7 @@ InventoryDetailPage.propTypes = {
   onGetRowData: PropTypes.func,
   onChangeRowData: PropTypes.func,
   onDeleteRowData: PropTypes.func,
+  onReset: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -250,7 +251,8 @@ function mapDispatchToProps(dispatch) {
     onGetRowData: payload => dispatch(getRowData(payload)),
     onGetAdditionalData: evt => dispatch(getAdditionalData()),
     onDeleteRowData: payload => dispatch(deleteRowData(payload)),
-    onChangeHistoryRowData: payload => dispatch(changeHistoryData(payload))
+    onChangeHistoryRowData: payload => dispatch(changeHistoryData(payload)),
+    onReset: evt => dispatch(reset())
   };
 }
 

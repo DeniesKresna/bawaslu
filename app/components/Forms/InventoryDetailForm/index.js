@@ -39,9 +39,9 @@ function InventoryDetailForm({
   const [imageReceive, setImageReceive] = useState({value:'', error: false, helperText: ''});
   const [imageReceiveUrl, setImageReceiveUrl] = useState(null);
   const [procurementDoc, setProcurementDoc] = useState({value:'', error: false, helperText: ''});
-  const [procurementDocUrl, setProcurementDocUrl] = useState(rowDataCopy.procurementDocUrl != ""?serverBaseUrl + 'medias?path=' + rowDataCopy.procurementDocUrl:null);
+  const [procurementDocUrl, setProcurementDocUrl] = useState(rowDataCopy.procurementDocUrl != ""?serverBaseUrl + 'documents?path=' + rowDataCopy.procurementDocUrl:null);
   const [statusDoc, setStatusDoc] = useState({value:'', error: false, helperText: ''});
-  const [statusDocUrl, setStatusDocUrl] = useState(rowDataCopy.statusDocUrl != ""?serverBaseUrl + 'medias?path=' + rowDataCopy.statusDocUrl:null);
+  const [statusDocUrl, setStatusDocUrl] = useState(rowDataCopy.statusDocUrl != ""?serverBaseUrl + 'documents?path=' + rowDataCopy.statusDocUrl:null);
   const [moveDescription, setDescriptionMove] = useState({value:'', error:false, helperText: ''})
   const [moveTime, setMoveTime] = useState({value:dateTimeNow(), error:false, helperText: ''})
   const [yearList, setYearList] = useState([]);

@@ -4,6 +4,7 @@
  *
  */
 
+export const RESET = 'app/InventoryDetailPage/RESET';
 export const CHANGE_ROW_DATA = 'app/InventoryDetailPage/CHANGE_ROW_DATA';
 export const GET_ROW_DATA = 'app/InventoryDetailPage/GET_ROW_DATA';
 export const GET_ROW_DATA_SUCCESS = 'app/InventoryDetailPage/GET_ROW_DATA_SUCCESS';
