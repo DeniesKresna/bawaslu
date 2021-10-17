@@ -49,7 +49,7 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
         <DialogContent>
           <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
-                <Grid container>
+                <Grid container spacing={2}>
                   <Grid item md={12}>
                     {rowData.imageUrl && <img src={serverBaseUrl + "medias?path=" + rowData.imageUrl} height="200"/>}
                   </Grid>
@@ -60,10 +60,16 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
                     : {rowData.name}
                   </Grid>
                   <Grid item md={6}>
+                    Tipe
+                  </Grid>
+                  <Grid item md={6}>
+                    : {rowData.hasOwnProperty('GoodsType') && rowData.GoodsType.name} - {rowData.hasOwnProperty('GoodsType') && rowData.GoodsType.code}
+                  </Grid>
+                  <Grid item md={6}>
                     NUP
                   </Grid>
                   <Grid item md={6}>
-                    : {rowData.hasOwnProperty('GoodsType') && rowData.GoodsType.code + rowData.nup}
+                    : {rowData.nup}
                   </Grid>
                   <Grid item md={6}>
                     Tahun Perolehan

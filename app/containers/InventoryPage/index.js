@@ -16,7 +16,7 @@ import _, { debounce } from 'lodash';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { makeSelectData, makeSelectSearch } from './selectors';
-import { changeSearch, changeData, getData, deleteRow } from './actions';
+import { changeSearch, changeData, getData, deleteRow, exportData } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 
@@ -32,6 +32,7 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
+import GridOnIcon from '@material-ui/icons/GridOn';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -81,7 +82,7 @@ const StyledTableContainer = withStyles((theme) => ({
   },
 }))(TableContainer);
 
-export function InventoryPage({ history, data, search, onGetData, onChangeSearch, onChangeData, onDeleteRow }) {
+export function InventoryPage({ history, data, onExportData, search, onGetData, onChangeSearch, onChangeData, onDeleteRow }) {
   useInjectReducer({ key: 'inventoryPage', reducer });
   useInjectSaga({ key: 'inventoryPage', saga });
   const entity = "Inventaris";
@@ -126,6 +127,8 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
       history.push("/admin/inventory/detail?code="+rowData.GoodsType.ID+"&nup="+rowData.nup)
     }else if(mode == 'create'){
       history.push("/admin/inventory/create")
+    }else if(mode == 'export'){
+      onExportData()
     }else{
       setInventoryId(rowData.ID)
       setDialogStatus(true)
@@ -156,6 +159,14 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
           >
             Tambah
           </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<GridOnIcon />}
+            onClick={()=>{handleClickOperation('export')}}
+          >
+            Export
+          </Button>
         </Grid>
       </Grid>
       <StyledTableContainer component={Paper}>
@@ -166,6 +177,7 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
               <StyledTableCell align="center">Nama</StyledTableCell>
               <StyledTableCell align="center">Tipe</StyledTableCell>
               <StyledTableCell align="center">Kode</StyledTableCell>
+              <StyledTableCell align="center">NUP</StyledTableCell>
               <StyledTableCell align="center">Satuan</StyledTableCell>
               <StyledTableCell align="center">Kuantitas</StyledTableCell>
               <StyledTableCell align="center">Harga</StyledTableCell>
@@ -180,7 +192,8 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
                 <StyledTableCell align="center">{row.Number}</StyledTableCell>
                 <StyledTableCell align="center">{row.name}</StyledTableCell>
                 <StyledTableCell align="center">{row.GoodsType != null && row.GoodsType.name}</StyledTableCell>
-                <StyledTableCell align="center">{row.GoodsType != null && (row.GoodsType.code + row.nup.toString()) }</StyledTableCell>
+                <StyledTableCell align="center">{row.GoodsType != null && row.GoodsType.code}</StyledTableCell>
+                <StyledTableCell align="center">{row.nup}</StyledTableCell>
                 <StyledTableCell align="center">{row.Unit != null && row.Unit.name}</StyledTableCell>
                 <StyledTableCell align="center">{row.quantity}</StyledTableCell>
                 <StyledTableCell align="center">{row.price}</StyledTableCell>
@@ -229,6 +242,7 @@ export function InventoryPage({ history, data, search, onGetData, onChangeSearch
 
 InventoryPage.propTypes = {
   data: PropTypes.object,
+  onExportData: PropTypes.func,
   search: PropTypes.string,
   onGetData: PropTypes.func,
   onChangeSearch: PropTypes.func,
@@ -245,6 +259,7 @@ function mapDispatchToProps(dispatch) {
   return {
     onChangeSearch: payload => dispatch(changeSearch(payload)),
     onChangeData: payload => dispatch(changeData(payload)),
+    onExportData: paylaod => dispatch(exportData()),
     onGetData: evt => dispatch(getData()),
     onDeleteRow: payload => dispatch(deleteRow(payload))
   };

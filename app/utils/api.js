@@ -1,6 +1,6 @@
 import axios from "axios";
 
-//export const serverBaseUrl = "https://4da932dae911e7.lhr.domains/api/v1/";
+//export const serverBaseUrl = "https://ed612d016a0270.lhr.domains/api/v1/";
 export const serverBaseUrl = "http://localhost:8090/api/v1/";
 /*
 const api = axios.create({
@@ -122,10 +122,70 @@ export default function request (method, route, body = null) {
       return Promise.reject(error.response.data);
   }
 
-  return api({
+    return api({
+        method,
+        url: route,
+        data: body
+    }).then(onSuccess)
+        .catch(onError);
+}
+
+ /**
+* Request Wrapper with default success/error actions
+ *
+ * @param  {string} method
+ *
+ * @param  {string} route
+ *
+ * @param  {object} body
+ *
+ * @return {object} Response data
+ */
+export function requestFile (method, route, body = null) {
+
+  const onSuccess = function (response) {
+        var disposition = response.headers["content-disposition"];
+        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        var matches = filenameRegex.exec(disposition);
+        let filename = "";
+        if (matches != null && matches[1]) { 
+          filename = matches[1].replace(/['"]/g, '');
+        }
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+  }
+
+  const onError = function (error) {
+      console.error('Request Failed:', error.config);
+
+      if (error.response.Message) {
+          // Request was made but server responded with something
+          // other than 2xx
+          console.error(error.response.Message);
+
+      }
+      else if (error.response) {
+          // Request was made but server responded with something
+          // other than 2xx
+          console.error(error.response);
+
+      } else {
+          // Something else happened while setting up the request
+          // triggered the error
+          console.error('Error Message:', error.message);
+      }
+
+      return Promise.reject(error.response.data);
+  }
+    return api({
       method,
       url: route,
-      data: body
-  }).then(onSuccess)
-      .catch(onError);
+      data: body,
+      responseType: 'blob', // important
+    }).then(onSuccess)
+        .catch(onError);
 }

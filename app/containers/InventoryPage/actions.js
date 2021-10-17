@@ -4,7 +4,7 @@
  *
  */
 
-import { CHANGE_DATA, CHANGE_SEARCH, GET_DATA, GET_DATA_SUCCESS, CHANGE_ROW, DELETE_ROW } from './constants';
+import { CHANGE_DATA, CHANGE_SEARCH, GET_DATA, GET_DATA_SUCCESS, CHANGE_ROW, DELETE_ROW, EXPORT_DATA } from './constants';
 
 /**
  * Changes the entity data
@@ -84,5 +84,16 @@ export function changeData(payload) {
   return {
     type: DELETE_ROW,
     payload
+  };
+}
+
+/**
+ * Export the whole Data
+ *
+ * @return {object} An action object with a type of EXPORT_DATA
+ */
+ export function exportData() {
+  return {
+    type: EXPORT_DATA,
   };
 }

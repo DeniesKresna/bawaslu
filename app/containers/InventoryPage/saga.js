@@ -1,9 +1,9 @@
 // import { take, call, put, select } from 'redux-saga/effects';
 import { call, select, put, takeLatest } from '@redux-saga/core/effects';
-import request from '../../utils/api';
+import request, {requestFile} from '../../utils/api';
 import { makeSelectData, makeSelectSearch } from './selectors';
 import { getDataSuccess, getDataFailed } from './actions';
-import { GET_DATA, CHANGE_DATA, CHANGE_ROW, DELETE_ROW } from './constants';
+import { GET_DATA, CHANGE_DATA, CHANGE_ROW, DELETE_ROW, EXPORT_DATA } from './constants';
 import { changeNotifStatus, changeLoading } from '../Layouts/LayoutDashboard/actions';
 
 const key = 'inventories';
@@ -95,10 +95,31 @@ export function* getData() {
 }
 
 /**
+ * Export Inventory Data
+ */
+ export function* exportData() {
+  try {
+    yield put(changeLoading(true));
+    const url = key + "/getexcel"
+    const data = yield call(requestFile, "GET", url);
+    yield put(changeLoading(false));
+  } catch (error) {
+    yield put(changeNotifStatus({
+      open: true,
+      title: 'Gagal',
+      message: error.Message,
+      color: 'error'
+    }));
+    yield put(changeLoading(false));
+  }
+}
+
+/**
  * Root saga manages watcher lifecycle
  */
  export default function* rootSaga() {
   yield takeLatest([GET_DATA, CHANGE_DATA], getData);
   yield takeLatest([CHANGE_ROW], setData);
   yield takeLatest([DELETE_ROW], deleteData);
+  yield takeLatest([EXPORT_DATA], exportData);
 }

@@ -5,21 +5,11 @@
  */
 
 import React, { useEffect, useState, memo, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import _, { debounce } from 'lodash';
-import FormBuilder from "@jeremyling/react-material-ui-form-builder";
-
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import { makeSelectData, makeSelectSearch } from './selectors';
-import { changeSearch, changeData, changeRow, getData, deleteRow } from './actions';
-import reducer from './reducer';
-import saga from './saga';
-import Scanner from "react-webcam-qr-scanner";
+import BarcodeScanner from '../../components/BarcodeScanner';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -28,16 +18,16 @@ export function BarcodePage({  }) {
   //useInjectSaga({ key: 'barcodePage', saga });
   const entity = "Barcode";
 
-  useEffect(() => {
-  }, []);
+  const [scanning, setScanning] = useState(false);
 
-  const handleDecode = (result) => {
-    console.log(result);
-    alert(result)
-  } 
+  const handleScan = data => {
+    setScanning(!scanning)
+  }
 
-  const handleScannerLoad = (mode) => {
-    console.log(mode);
+  const handleDetected = res => {
+    //setResult(res);
+    //alert(res);
+    console.log(res);
   }
 
   return (
@@ -47,21 +37,8 @@ export function BarcodePage({  }) {
         <meta name="description" content="Halaman Barcode" />
       </Helmet>
       <h1>{entity}</h1>
-      <Grid container>
-        <Grid item>
-          <Scanner 
-            className="some-classname"
-            onDecode={handleDecode}
-            onScannerLoad={handleScannerLoad}
-            constraints={{ 
-              audio: false, 
-              video: { 
-                facingMode: "environment" 
-              } 
-            }}
-            captureSize={{ width: 1280, height: 720 }}
-          />
-        </Grid>
+      <Grid>
+        <BarcodeScanner />
       </Grid>
     </div>
   );
