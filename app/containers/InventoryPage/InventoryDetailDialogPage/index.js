@@ -60,49 +60,61 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
                     Nama
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    : {rowData.name}
+                    <strong>{rowData.name}</strong>
                   </Grid>
                   <Grid item md={6} xs={12}>
                     Tipe
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    : {rowData.hasOwnProperty('GoodsType') && rowData.GoodsType.name} - {rowData.hasOwnProperty('GoodsType') && rowData.GoodsType.code}
+                    <strong>{rowData.hasOwnProperty('GoodsType') && rowData.GoodsType.name} - {rowData.hasOwnProperty('GoodsType') && rowData.GoodsType.code}</strong>
                   </Grid>
                   <Grid item md={6} xs={12}>
                     NUP
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    : {rowData.nup}
+                    <strong>{rowData.nup}</strong>
                   </Grid>
                   <Grid item md={6} xs={12}>
                     Tahun Perolehan
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    : {rowData.year}
+                    <strong>{rowData.year}</strong>
                   </Grid>
                   <Grid item md={6} xs={12}>
                     Jumlah
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    : {rowData.hasOwnProperty('Unit') && rowData.quantity + " " + rowData.Unit.name}
+                    <strong>{rowData.hasOwnProperty('Unit') && rowData.quantity + " " + rowData.Unit.name}</strong>
                   </Grid>
                   <Grid item md={6} xs={12}>
                     Harga Satuan
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    : {rowData.price}
+                    <strong>{rowData.price}</strong>
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    Ruang
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <strong>{rowData.Room.name}</strong>
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    Kondisi
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <strong>{rowData.Condition.name}</strong>
                   </Grid>
                   <Grid item md={6} xs={12}>
                     Dokumen Pengadaan
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    : {rowData.hasOwnProperty('procurementDocUrl') && <a onClick={() => {downloadDocs(serverBaseUrl + "documents?path=" + rowData.procurementDocUrl)}}>Download</a> }
+                    <strong>{rowData.hasOwnProperty('procurementDocUrl') && <a onClick={() => {downloadDocs(serverBaseUrl + "documents?path=" + rowData.procurementDocUrl)}}>Download</a> }</strong>
                   </Grid>
                   <Grid item md={6} xs={12}>
                     Dokumen Penetapan Status
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    : {rowData.hasOwnProperty('statusDocUrl')&& <a href={serverBaseUrl + "documents?path=" + rowData.statusDocUrl}>Download</a> }
+                    <strong>{rowData.hasOwnProperty('statusDocUrl')&& <a href={serverBaseUrl + "documents?path=" + rowData.statusDocUrl}>Download</a> }</strong>
                   </Grid>
                 </Grid>
             </Grid>
