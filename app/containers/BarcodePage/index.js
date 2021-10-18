@@ -14,7 +14,7 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { makeSelectData, makeSelectDataExist } from './selectors';
-import { getData } from './actions';
+import { getData, setDataExist } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 
@@ -25,7 +25,7 @@ import AspectRatioIcon from '@material-ui/icons/AspectRatio';
 
 import Grid from '@material-ui/core/Grid';
 
-export function BarcodePage({ history, data, dataExist, onGetData }) {
+export function BarcodePage({ history, data, isLoading, onChangeDataExist, onGetData }) {
   useInjectReducer({ key: 'barcodePage', reducer });
   useInjectSaga({ key: 'barcodePage', saga });
   const entity = "Barcode";
@@ -34,30 +34,25 @@ export function BarcodePage({ history, data, dataExist, onGetData }) {
   const [showScan, setShowScan] = useState(false);
 
   const handleDetected = res => {
+    setShowScan(false)
     const resString = String(res)
     if(resString.includes("-")){
       const splitRes = resString.split("-")
       onGetData({code:splitRes[0], nup:splitRes[1]})
-      console.log(splitRes)
-      if(dataExist)
-        setDialogStatus(true)
-      else{
-        if(confirm("Data tidak ditemukan. buat Inventaris baru?"))
-          history.push("/admin/inventory/create")
-      }
+      setDialogStatus(true)
     }else{
       alert("ini bukan barcode SAMAWA")
     }
   }
 
   const handleCloseDialog = (md='cancel', rowData=null) => {
+    //onChangeDataExist();
     if(md=='edit'){
       history.push("/admin/inventory/detail?code="+rowData.GoodsType.ID+"&nup="+rowData.nup)
     }
     setDialogStatus(false)
     setShowScan(false)
   }
-
 
   const handleToggleScan = () => {
     setShowScan(!showScan)
@@ -82,7 +77,7 @@ export function BarcodePage({ history, data, dataExist, onGetData }) {
         {showScan && <BarcodeScanner onHandleDetected={handleDetected} />}
       </Grid>
 
-      { data != null && <InventoryDetailDialogPage id={data.ID} onHandleCloseDialog={handleCloseDialog} dialogStatus={dialogStatus} />
+      { data != null && !isLoading && <InventoryDetailDialogPage id={data.ID} onHandleCloseDialog={handleCloseDialog} dialogStatus={dialogStatus} />
             }
     </div>
   );
@@ -90,18 +85,20 @@ export function BarcodePage({ history, data, dataExist, onGetData }) {
 
 BarcodePage.propTypes = {
   data: PropTypes.object,
-  dataExist: PropTypes.bool,
+  isLoading: PropTypes.bool,
   onGetData: PropTypes.func,
+  onChangeDataExist: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   data: makeSelectData(),
-  dataExist: makeSelectDataExist()
+  isLoading: makeSelectDataExist()
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     onGetData: payload => dispatch(getData(payload)),
+    onChangeDataExist: evt => dispatch(setDataExist()),
   };
 }
 

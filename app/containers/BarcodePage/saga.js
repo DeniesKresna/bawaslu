@@ -2,6 +2,7 @@
 import { call, select, put, takeLatest } from '@redux-saga/core/effects';
 import request from '../../utils/api';
 import { makeSelectData, makeSelectSearch } from './selectors';
+import { push } from 'react-router-redux';
 import { getDataSuccess, getDataFailed } from './actions';
 import { GET_DATA } from './constants';
 import { changeNotifStatus, changeLoading } from '../Layouts/LayoutDashboard/actions';
@@ -31,6 +32,8 @@ export function* getData(action) {
       color: 'error'
     }));
     yield put(changeLoading(false));
+    if(confirm("Data tidak ditemukan. buat Inventaris baru?"))
+        push("/admin/inventory/create")
   }
 }
 

@@ -4,7 +4,7 @@
  *
  */
 
-import { GET_DATA, GET_DATA_SUCCESS, GET_DATA_FAILED } from './constants';
+import { GET_DATA, GET_DATA_SUCCESS, GET_DATA_FAILED, SET_DATA_EXIST} from './constants';
 
 /**
  * Get the entity data
@@ -42,5 +42,16 @@ import { GET_DATA, GET_DATA_SUCCESS, GET_DATA_FAILED } from './constants';
  export function getDataFailed() {
   return {
     type: GET_DATA_FAILED
+  };
+}
+
+/**
+ * Set the data exist status
+ *
+ * @return {object} An action object with a type of SET_DATA_EXIST
+ */
+ export function setDataExist() {
+  return {
+    type: SET_DATA_EXIST,
   };
 }

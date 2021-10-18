@@ -29,7 +29,7 @@ function BarcodeScanner({onHandleDetected}) {
                         delay={300}
                         onError={handleError}
                         onScan={handleScan}
-                        style={{ height: 240, width: 320 }}
+                        style={{ height: 240, width: 300 }}
                     />
                 </div>
                 </center>
