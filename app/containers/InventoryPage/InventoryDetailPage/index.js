@@ -190,14 +190,14 @@ export function InventoryDetailPage({ onReset, history, rowData, goodsTypeList, 
         <meta name="description" content="Pengaturan Barang Inventaris" />
       </Helmet>
       <Grid container spacing={5}>
-        <Grid item md={4}>
+        <Grid item md={4} xs={12}>
           { !isBusy &&
           <InventoryDetailForm goBack={goBack} title={formLabel() + entity} rowData={entityMode=='edit'?rowData:{}} unitList={unitList} roomList={roomList} conditionList={conditionList} goodsTypeList={goodsTypeList} 
             onSubmitForm={handleSubmitForm} entityMode={entityMode}
           />
           }
         </Grid>
-        <Grid item md={8}>
+        <Grid item md={8} xs={12}>
           { (!isBusy && rowData.hasOwnProperty("ID")) && entityMode=='edit' &&
             <div>
               <h3>Perubahan Kondisi Barang</h3>

@@ -351,19 +351,19 @@ function InventoryDetailForm({
         <Grid item md={6}>
           <TextField label='Harga Satuan' value={price.value || ''} onChange={onChangePrice} type="number" error={price.error} helperText={price.helperText} fullWidth />
         </Grid>
-        { entityMode == "create" &&
+        {/* entityMode == "create" &&
           <Grid item md={12}>
             <Autocomplete options={roomList} getOptionLabel={(option) => option.name || ''} value={findObjectById(roomList, room.value)}
               getOptionSelected={(option, value) => option.ID === value.ID || {}} onChange={onChangeRoom}
                 renderInput={(params) => <TextField {...params} label='Ruangan' error={room.error} helperText={room.helperText} fullWidth />}
               />
-          </Grid>
+          </Grid>*/
         }
-        { entityMode == "create" &&
+        {/* entityMode == "create" &&
           <Grid item md={12}>
             <TextField label='Tanggal Pengadaan' onChange={onChangeMoveTime} type="datetime-local" error={moveTime.error} helperText={moveTime.helperText} 
             value={moveTime.value} InputLabelProps={{shrink: true}} fullWidth />
-          </Grid>
+          </Grid>*/
         }
         <Grid item md={12}>
           <input accept="image/*" id="icon-button-image" type="file" style={{ display: 'none' }} onChange={onChangeImage}/>
@@ -379,7 +379,7 @@ function InventoryDetailForm({
             <img src={imageUrl} height="200" />
           </Grid>
         }
-        {entityMode == 'create' && <Grid item md={12}>
+        {/*entityMode == 'create' && <Grid item md={12}>
           <input accept="image/*" id="icon-button-image-receive" type="file" style={{ display: 'none' }} onChange={onChangeImageReceive}/>
           <label htmlFor="icon-button-image-receive">
             <Button color="secondary" aria-label="upload picture" component="span" >
@@ -388,12 +388,12 @@ function InventoryDetailForm({
             </Button>
           </label>
         </Grid>
-        }
-        {
+      */}
+        {/*
           (imageReceiveUrl != null && entityMode == 'create') && <Grid item md={12}>
             <img src={imageReceiveUrl} height="200" />
           </Grid>
-        }
+        */}
         <Grid item md={12}>
           <input accept="application/msword, application/pdf" id="icon-button-procurement" type="file" style={{ display: 'none' }} onChange={onChangeProcurementDoc}/>
           <label htmlFor="icon-button-procurement">
@@ -414,10 +414,10 @@ function InventoryDetailForm({
           </label>
           {statusDocUrl && <small><a href={statusDocUrl} target="_blank">[{statusDocUrl.split('/').slice(-1)[0]}]</a></small>}
         </Grid>
-        {entityMode == 'create' && <Grid item md={12}>
+        {/*entityMode == 'create' && <Grid item md={12}>
             <TextField label='Deskripsi Pengadaan' value={moveDescription.value || ''} onChange={onChangeMoveDescription} error={moveDescription.error} helperText={moveDescription.helperText} fullWidth/>
           </Grid>
-        }
+      */}
 
         <Grid item md={12}>
           <Button onClick={goBack} color="secondary">

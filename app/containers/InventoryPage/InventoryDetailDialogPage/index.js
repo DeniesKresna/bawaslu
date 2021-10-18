@@ -40,8 +40,9 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
   useInjectSaga({ key: 'inventoryDetailDialogPage', saga: saga });
 
   useEffect(() => {
+      rowData = {}
       onGetRowData(id);
-  }, []);
+  }, [id]);
 
   return (
     <div>

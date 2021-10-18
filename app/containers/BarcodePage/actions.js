@@ -4,7 +4,7 @@
  *
  */
 
-import { GET_DATA, GET_DATA_SUCCESS } from './constants';
+import { GET_DATA, GET_DATA_SUCCESS, GET_DATA_FAILED } from './constants';
 
 /**
  * Get the entity data
@@ -31,5 +31,16 @@ import { GET_DATA, GET_DATA_SUCCESS } from './constants';
   return {
     type: GET_DATA_SUCCESS,
     payload
+  };
+}
+
+/**
+ * Get the entity data
+ *
+ * @return {object} An action object with a type of GET_DATA_FAILED
+ */
+ export function getDataFailed() {
+  return {
+    type: GET_DATA_FAILED
   };
 }

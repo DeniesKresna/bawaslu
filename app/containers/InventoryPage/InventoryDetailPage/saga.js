@@ -1,4 +1,5 @@
 import { call, select, put, takeLatest } from '@redux-saga/core/effects';
+import { push } from 'react-router-redux';
 import request from '../../../utils/api';
 import { makeSelectRowData } from './selectors';
 import { getList as getUnitList } from './../../UnitPage/actions';
@@ -61,6 +62,9 @@ export function* getData(action) {
       color: 'success'
     }));
     yield put(changeLoading(false));
+    if(action.payload.ID == null){
+      yield put(push('/admin/inventory'));
+    }
   } catch (error) {
     yield put(changeNotifStatus({
       open: true,

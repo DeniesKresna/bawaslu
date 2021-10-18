@@ -13,7 +13,7 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { makeSelectData } from './selectors';
+import { makeSelectData, makeSelectDataExist } from './selectors';
 import { getData } from './actions';
 import reducer from './reducer';
 import saga from './saga';
@@ -25,7 +25,7 @@ import AspectRatioIcon from '@material-ui/icons/AspectRatio';
 
 import Grid from '@material-ui/core/Grid';
 
-export function BarcodePage({ data, onGetData }) {
+export function BarcodePage({ history, data, dataExist, onGetData }) {
   useInjectReducer({ key: 'barcodePage', reducer });
   useInjectSaga({ key: 'barcodePage', saga });
   const entity = "Barcode";
@@ -38,13 +38,22 @@ export function BarcodePage({ data, onGetData }) {
     if(resString.includes("-")){
       const splitRes = resString.split("-")
       onGetData({code:splitRes[0], nup:splitRes[1]})
-      setDialogStatus(true)
+      console.log(splitRes)
+      if(dataExist)
+        setDialogStatus(true)
+      else{
+        if(confirm("Data tidak ditemukan. buat Inventaris baru?"))
+          history.push("/admin/inventory/create")
+      }
     }else{
       alert("ini bukan barcode SAMAWA")
     }
   }
 
-  const handleCloseDialog = () => {
+  const handleCloseDialog = (md='cancel', rowData=null) => {
+    if(md=='edit'){
+      history.push("/admin/inventory/detail?code="+rowData.GoodsType.ID+"&nup="+rowData.nup)
+    }
     setDialogStatus(false)
     setShowScan(false)
   }
@@ -81,11 +90,13 @@ export function BarcodePage({ data, onGetData }) {
 
 BarcodePage.propTypes = {
   data: PropTypes.object,
+  dataExist: PropTypes.bool,
   onGetData: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   data: makeSelectData(),
+  dataExist: makeSelectDataExist()
 });
 
 function mapDispatchToProps(dispatch) {

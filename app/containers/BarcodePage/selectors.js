@@ -13,4 +13,10 @@ const makeSelectData = () =>
     substate => substate.data
   );
 
-export { makeSelectData };
+const makeSelectDataExist = () =>
+  createSelector(
+    selectBarcodePageDomain,
+    substate => substate.dataExist
+  );
+
+export { makeSelectData, makeSelectDataExist };

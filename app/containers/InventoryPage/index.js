@@ -134,6 +134,7 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
       onExportData()
     }else{
       setInventoryId(rowData.ID)
+      console.log(rowData.ID)
       setDialogStatus(true)
     }
   }
@@ -184,8 +185,8 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
               <StyledTableCell align="center">Satuan</StyledTableCell>
               <StyledTableCell align="center">Kuantitas</StyledTableCell>
               <StyledTableCell align="center">Harga</StyledTableCell>
-              <StyledTableCell align="center">Kondisi</StyledTableCell>
-              <StyledTableCell align="center">Ruang</StyledTableCell>
+              {/*<StyledTableCell align="center">Kondisi</StyledTableCell>
+              <StyledTableCell align="center">Ruang</StyledTableCell>*/}
               <StyledTableCell align="center">Operasi</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -200,8 +201,8 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
                 <StyledTableCell align="center">{row.Unit != null && row.Unit.name}</StyledTableCell>
                 <StyledTableCell align="center">{row.quantity}</StyledTableCell>
                 <StyledTableCell align="center">{row.price}</StyledTableCell>
-                <StyledTableCell align="center">{row.Conditions.length > 0 && row.Conditions[0].Condition.name}</StyledTableCell>
-                <StyledTableCell align="center">{row.Rooms.length > 0 && row.Rooms[0].Room.name}</StyledTableCell>
+                {/*<StyledTableCell align="center">{row.Conditions.length > 0 && row.Conditions[0].Condition.name}</StyledTableCell>
+                <StyledTableCell align="center">{row.Rooms.length > 0 && row.Rooms[0].Room.name}</StyledTableCell>*/}
                 <StyledTableCell align="center">
                   <StyledIconButton color="secondary" aria-label="lihat" onClick={()=>{handleClickOperation('show',row)}}>
                     <VisibilityIcon fontSize="small" />

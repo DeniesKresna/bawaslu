@@ -2,7 +2,7 @@
 import { call, select, put, takeLatest } from '@redux-saga/core/effects';
 import request from '../../utils/api';
 import { makeSelectData, makeSelectSearch } from './selectors';
-import { getDataSuccess, getListSuccess } from './actions';
+import { getDataSuccess, getDataFailed } from './actions';
 import { GET_DATA } from './constants';
 import { changeNotifStatus, changeLoading } from '../Layouts/LayoutDashboard/actions';
 
@@ -23,6 +23,7 @@ export function* getData(action) {
     yield put(changeLoading(false));
   } catch (error) {
     console.log(error)
+    yield put(getDataFailed());
     yield put(changeNotifStatus({
       open: true,
       title: 'Gagal',
