@@ -94,6 +94,7 @@
     "moment": "^2.29.1",
     "notistack": "^1.0.10",
     "prop-types": "15.7.2",
+    "qrcode.react": "^1.0.1",
     "quagga": "^0.12.1",
     "query-string": "^7.0.1",
     "react": "16.8.6",

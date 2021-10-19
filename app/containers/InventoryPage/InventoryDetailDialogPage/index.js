@@ -90,7 +90,7 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
                     Harga Satuan
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <strong>{rowData.price}</strong>
+                    <strong>Rp.{rowData.price},-</strong>
                   </Grid>
                   <Grid item md={6} xs={12}>
                     Ruang

@@ -19,6 +19,7 @@ import reducer from './reducer';
 import saga from './saga';
 
 import BarcodeScanner from '../../components/BarcodeScanner/index';
+import BarcodeGenerator from '../../components/BarcodeGenerator/index';
 import InventoryDetailDialogPage from '../InventoryPage/InventoryDetailDialogPage';
 import Button from '@material-ui/core/Button'
 import AspectRatioIcon from '@material-ui/icons/AspectRatio';
@@ -74,7 +75,7 @@ export function BarcodePage({ history, data, isLoading, onChangeDataExist, onGet
           >
             Scan Barcode
           </Button>
-        {showScan && <BarcodeScanner onHandleDetected={handleDetected} />}
+        {showScan && <BarcodeGenerator onHandleDetected={handleDetected} />}
       </Grid>
 
       { data != null && !isLoading && <InventoryDetailDialogPage id={data.ID} onHandleCloseDialog={handleCloseDialog} dialogStatus={dialogStatus} />
