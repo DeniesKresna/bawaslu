@@ -85,6 +85,11 @@ export const normalizeData = (val) => {
                     element.deleted_at = readableDateHour(element.DeletedAt);
                 }
             }
+            if(element.active == 1){
+                element.active = "ya"
+            }else{
+                element.active = ""
+            }
         });
     }else{
         dataList.data = []

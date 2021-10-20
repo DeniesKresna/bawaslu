@@ -101,6 +101,8 @@ function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onCh
         return <StyledTableCell key={col} align="right">Kode</StyledTableCell>
       case 'image_url':
         return <StyledTableCell key={col} align="right">Gambar</StyledTableCell>
+      case 'start_time':
+        return <StyledTableCell key={col} align="right">Mulai</StyledTableCell>
       default:
         return <StyledTableCell key={col} align="right">{col}</StyledTableCell>
     }
@@ -111,6 +113,10 @@ function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onCh
       case 'entity_type':
         return (<StyledTableCell key={col} align="right">
           {row.entity_type == 'room'? "Pindah Ruangan ke "+row.entity_name+" pada "+readableDateHour(row.history_time):"Kondisi barang "+row.entity_name+" pada "+readableDateHour(row.history_time)}
+        </StyledTableCell>)
+      case 'start_time':
+        return (<StyledTableCell key={col} align="right">
+          {readableDateHour(row.start_time)}
         </StyledTableCell>)
       case 'updater':
         return <StyledTableCell key={col} align="right">{row.Updater.name}</StyledTableCell>

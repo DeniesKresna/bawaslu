@@ -35,6 +35,7 @@ import HomeWorkIcon from '@material-ui/icons/HomeWork';
 import EventSeatIcon from '@material-ui/icons/EventSeat';
 import AmpStoriesIcon from '@material-ui/icons/AmpStories';
 import BrokenImageIcon from '@material-ui/icons/BrokenImage';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 const useStyles = makeStyles((theme) => ({
   nested: {
@@ -111,6 +112,14 @@ export function Sidebar() {
               <BrokenImageIcon />
             </ListItemIcon>
             <ListItemText primary="Kondisi" />
+          </ListItem>
+        </List>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested} component={Link} to="/admin/period">
+            <ListItemIcon>
+              <AccessTimeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Periode Invent" />
           </ListItem>
         </List>
         <List component="div" disablePadding>

@@ -19,4 +19,10 @@ const makeSelectDataExist = () =>
     substate => substate.dataExist
   );
 
-export { makeSelectData, makeSelectDataExist };
+const makeSelectGoodsTypeDataExist = () =>
+  createSelector(
+    selectBarcodePageDomain,
+    substate => substate.goodsTypeData
+  );
+
+export { makeSelectData, makeSelectDataExist, makeSelectGoodsTypeDataExist };

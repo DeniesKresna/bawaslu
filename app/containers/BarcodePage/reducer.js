@@ -4,11 +4,12 @@
  *
  */
 import produce from 'immer';
-import { GET_DATA, GET_DATA_SUCCESS, GET_DATA_FAILED, SET_DATA_EXIST } from './constants';
+import { GET_DATA, GET_DATA_SUCCESS, GET_GOODS_TYPE_SUCCESS, GET_DATA_FAILED, SET_DATA_EXIST } from './constants';
 
 export const initialState = {
   data: null,
-  dataExist: false
+  dataExist: false,
+  goodsTypeData: []
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -22,6 +23,9 @@ const barcodePageReducer = (state = initialState, action) =>
       case GET_DATA_SUCCESS:
         draft.data = action.payload;
         draft.dataExist = false;
+        break;
+      case GET_GOODS_TYPE_SUCCESS:
+        draft.goodsTypeData = action.payload;
         break;
       case GET_DATA_FAILED:
         draft.dataExist = false

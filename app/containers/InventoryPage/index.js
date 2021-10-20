@@ -85,7 +85,7 @@ const StyledTableContainer = withStyles((theme) => ({
 export function InventoryPage({ history, data, onExportData, search, onGetData, onChangeSearch, onChangeData, onDeleteRow }) {
   useInjectReducer({ key: 'inventoryPage', reducer });
   useInjectSaga({ key: 'inventoryPage', saga });
-  const entity = "Inventaris";
+  const entity = "Master Data Inventaris";
 
   const delayedGetData = useCallback(debounce(onGetData, 2000), []); 
   useEffect(() => {

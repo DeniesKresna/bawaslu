@@ -4,7 +4,7 @@
  *
  */
 
-import { GET_DATA, GET_DATA_SUCCESS, GET_DATA_FAILED, SET_DATA_EXIST} from './constants';
+import { GET_DATA, GET_GOODS_TYPE, GET_GOODS_TYPE_SUCCESS, GET_DATA_SUCCESS, GET_DATA_FAILED, SET_DATA_EXIST} from './constants';
 
 /**
  * Get the entity data
@@ -53,5 +53,30 @@ import { GET_DATA, GET_DATA_SUCCESS, GET_DATA_FAILED, SET_DATA_EXIST} from './co
  export function setDataExist() {
   return {
     type: SET_DATA_EXIST,
+  };
+}
+
+/**
+ * Get the goods type data
+ *
+ * @return {object} An action object with a type of GET_GOODS_TYPE
+ */
+ export function getGoodsType() {
+  return {
+    type: GET_GOODS_TYPE
+  };
+}
+
+/**
+ * Get the goods type data success
+ *
+ * @param  {object} payload
+ *
+ * @return {object} An action object with a type of GET_GOODS_TYPE_SUCCESS
+ */
+ export function getGoodsTypeSuccess(payload) {
+  return {
+    type: GET_GOODS_TYPE_SUCCESS,
+    payload
   };
 }

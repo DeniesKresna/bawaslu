@@ -1,6 +1,6 @@
 /**
  *
- * HistoryPage
+ * PeriodPage
  *
  */
 
@@ -19,9 +19,9 @@ import { changeSearch, changeData, changeRow, getData, deleteRow } from './actio
 import reducer from './reducer';
 import saga from './saga';
 
-import { normalizeData } from '../../../utils/helpers';
-import CommonTable from '../../../components/CommonTable';
-import HistoryDetailForm from '../../../components/Forms/HistoryDetailForm';
+import { normalizeData } from '../../utils/helpers';
+import CommonTable from '../../components/CommonTable';
+import PeriodDetailForm from '../../components/Forms/PeriodDetailForm';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -29,13 +29,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 
-export function HistoryPage({ inventoryId, roomList, conditionList, data, search, onGetData, onChangeSearch, onChangeData, onChangeRow, onDeleteRow }) {
-  useInjectReducer({ key: 'historyPage', reducer });
-  useInjectSaga({ key: 'historyPage', saga });
-
+export function PeriodPage({ data, search, onGetData, onChangeSearch, onChangeData, onChangeRow, onDeleteRow }) {
+  useInjectReducer({ key: 'periodPage', reducer });
+  useInjectSaga({ key: 'periodPage', saga });
   const delayedGetData = useCallback(debounce(onGetData, 2000), []); 
   useEffect(() => {
-    onGetData(inventoryId);
+    onGetData();
   }, []);
 
   const [dialogStatus, setDialogStatus] = useState(false);
@@ -55,7 +54,7 @@ export function HistoryPage({ inventoryId, roomList, conditionList, data, search
   };
 
   const tableData = normalizeData(data);
-  const columnViewed = ['Number','description','updater_name','entity_type','updated_at','operation'];
+  const columnViewed = ['Number','updater','start_time','active','updated_at','operation'];
 
   const handleChangePage = (event, newPage) => {
     data.current_page = newPage;
@@ -69,7 +68,7 @@ export function HistoryPage({ inventoryId, roomList, conditionList, data, search
 
   const changeSearch = event => {
     onChangeSearch(event.target.value);
-    delayedGetData(inventoryId);
+    delayedGetData();
   }
 
   const handleClickOperation = (mode, rowData=null) => {
@@ -78,8 +77,7 @@ export function HistoryPage({ inventoryId, roomList, conditionList, data, search
       setEntityMode("edit");
       setForm(rowData);
     }else{
-      setEntityMode("create");
-      setForm({InventoryID: inventoryId});
+      setEntityMode("create")
     }
     if(mode == 'delete'){
       if(confirm("Hapus "+entity+" ini?")){
@@ -109,8 +107,7 @@ export function HistoryPage({ inventoryId, roomList, conditionList, data, search
 
       <Dialog open={dialogStatus} onClose={()=>{handleCloseDialog('cancel')}} maxWidth='lg' fullWidth={true} aria-labelledby="form-dialog-title">
         <DialogContent>
-          <HistoryDetailForm rowData={form} title="Ubah Kondisi Barang" conditionList={conditionList} 
-            roomList={roomList} onSubmitForm={handleCloseDialog} entityMode={entityMode} />
+          <PeriodDetailForm rowData={form} title={entityMode=='create'? 'Tambah Periode': 'Ubah Periode'} onSubmitForm={handleCloseDialog} entityMode={entityMode} />
         </DialogContent>
       </Dialog>
 
@@ -118,10 +115,7 @@ export function HistoryPage({ inventoryId, roomList, conditionList, data, search
   );
 }
 
-HistoryPage.propTypes = {
-  inventoryId: PropTypes.number,
-  roomList: PropTypes.array,
-  conditionList: PropTypes.array,
+PeriodPage.propTypes = {
   data: PropTypes.object,
   search: PropTypes.string,
   onGetData: PropTypes.func,
@@ -141,7 +135,7 @@ function mapDispatchToProps(dispatch) {
     onChangeSearch: payload => dispatch(changeSearch(payload)),
     onChangeData: payload => dispatch(changeData(payload)),
     onChangeRow: payload => dispatch(changeRow(payload)),
-    onGetData: payload => dispatch(getData(payload)),
+    onGetData: evt => dispatch(getData()),
     onDeleteRow: payload => dispatch(deleteRow(payload))
   };
 }
@@ -154,4 +148,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(HistoryPage);
+)(PeriodPage);
