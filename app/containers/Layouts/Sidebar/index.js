@@ -36,6 +36,7 @@ import EventSeatIcon from '@material-ui/icons/EventSeat';
 import AmpStoriesIcon from '@material-ui/icons/AmpStories';
 import BrokenImageIcon from '@material-ui/icons/BrokenImage';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import EventNoteIcon from '@material-ui/icons/EventNote';
 
 const useStyles = makeStyles((theme) => ({
   nested: {
@@ -65,6 +66,12 @@ export function Sidebar() {
       <ListItem button component={Link} to="/admin/inventory">
         <ListItemIcon>
           <AmpStoriesIcon />
+        </ListItemIcon>
+        <ListItemText primary="Master Inventaris" />
+      </ListItem>
+      <ListItem button component={Link} to="/admin/inventory-period">
+        <ListItemIcon>
+          <EventNoteIcon />
         </ListItemIcon>
         <ListItemText primary="Inventaris" />
       </ListItem>

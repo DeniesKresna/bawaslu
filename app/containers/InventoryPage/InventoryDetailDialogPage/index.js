@@ -28,6 +28,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import HistoryTimeline from '../../../components/TimeLine/HistoryTimeline';
 
@@ -44,6 +46,15 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
       onGetRowData(id);
   }, [id]);
 
+  const [active, setActive] = useState({value:false, error: false, helperText: ''});
+
+  const onChangeActive = (event) => {
+    const inputValue = event.target.checked
+    let field = {...active}
+    field.value = inputValue
+    setActive(field);
+  }
+
   return (
     <div>
       {!isBusy &&
@@ -53,6 +64,12 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
           <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
                 <Grid container spacing={2}>
+                  <Grid item md={12}>
+                    <FormControlLabel
+                      control={<Checkbox checked={active.value} onChange={onChangeActive} />}
+                      label="Masukkan di Periode Aktif?"
+                    />
+                  </Grid>
                   <Grid item md={12}>
                     {rowData.imageUrl && <img src={serverBaseUrl + "medias?path=" + rowData.imageUrl} height="200"/>}
                   </Grid>
