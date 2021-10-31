@@ -15,8 +15,8 @@ import _, { debounce } from 'lodash';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { makeSelectData, makeSelectSearch } from './selectors';
-import { changeSearch, getData, deleteRow, exportData, getAdditionalData } from './actions';
+import { makeSelectData, makeSelectSearch, makeSelectFiltered } from './selectors';
+import { changeSearch, getData, deleteRow, exportData, getAdditionalData, changeData, changeFiltered } from './actions';
 import { makeSelectList as makeSelectUnitList } from '../UnitPage/selectors';
 import { makeSelectList as makeSelectRoomList } from '../RoomPage/selectors';
 import { makeSelectList as makeSelectGoodsTypeList } from '../GoodsTypePage/selectors';
@@ -112,8 +112,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function PeriodInventoryPage({ history, data, onExportData, search, onGetData, onChangeSearch, onDeleteRow,
-  units, goodsTypes, conditions, periods, rooms, onGetAdditionalData }) {
+export function PeriodInventoryPage({ history, data, onExportData, search, onGetData, onChangeSearch, onChangeData, onChangeFiltered, onDeleteRow,
+  units, goodsTypes, conditions, periods, rooms, onGetAdditionalData, filtered }) {
   useInjectReducer({ key: 'inventoryPage', reducer });
   useInjectSaga({ key: 'inventoryPage', saga });
   useInjectReducer({ key: 'unitPage', reducer: unitReducer });
@@ -130,17 +130,17 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
 
   const delayedGetData = useCallback(debounce(onGetData, 2000), []); 
   useEffect(() => {
-    onGetAdditionalData();     
+    onGetAdditionalData();  
     onGetData();
   }, []);
 
   const [dialogStatus, setDialogStatus] = useState(false);
   const [inventoryId, setInventoryId] = useState(null);
-  const [unit, setUnit] = useState(null);
-  const [period, setPeriod] = useState(null);
-  const [goodsType, setGoodsType] = useState(null);
-  const [room, setRoom] = useState(null);
-  const [condition, setCondition] = useState(null);
+  const [unit, setUnit] = useState(0);
+  const [period, setPeriod] = useState(0);
+  const [goodsType, setGoodsType] = useState(0);
+  const [room, setRoom] = useState(0);
+  const [condition, setCondition] = useState(0);
 
   const handleCloseDialog = (md='cancel', rowData=null) => {
     if(md=='edit'){
@@ -181,23 +181,34 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
 
   const handleChangePeriod = (event) => {
     setPeriod(event.target.value);
+    filtered.period = event.target.value;
+    onChangeFiltered({...filtered})
   }
 
   const handleChangeUnit = (event) => {
     setUnit(event.target.value);
+    filtered.unit = event.target.value;
+    onChangeFiltered({...filtered})
   }
 
   const handleChangeGoodsType = (event) => {
     setGoodsType(event.target.value);
+    filtered.goodsType = event.target.value;
+    onChangeFiltered({...filtered})
   }
 
   const handleChangeRoom = (event) => {
     setRoom(event.target.value);
+    filtered.room = event.target.value;
+    onChangeFiltered({...filtered})
   }
 
   const handleChangeCondition = (event) => {
     setCondition(event.target.value);
+    filtered.condition = event.target.value;
+    onChangeFiltered({...filtered})
   }
+  
   return (
     <div>
       <Helmet>
@@ -212,7 +223,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
           <Grid container spacing={3}>
             <Grid item md={2}>
               <TextField label='search' value={search} onChange={changeSearch} fullWidth />
-            </Grid>
+            </Grid>{periods != undefined &&
             <Grid item md={2}>
               <FormControl fullWidth>
                 <InputLabel id="select-period-label">Periode</InputLabel>
@@ -228,7 +239,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
                   }
                 </Select>
               </FormControl>
-            </Grid>
+            </Grid>}{goodsTypes != undefined &&
             <Grid item md={2}>
               <FormControl fullWidth>
                 <InputLabel id="select-type-label">Tipe</InputLabel>
@@ -244,7 +255,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
                   }
                 </Select>
               </FormControl>
-            </Grid>
+            </Grid>}{units != undefined &&
             <Grid item md={2}>
               <FormControl fullWidth>
                 <InputLabel id="select-unit-label">Satuan</InputLabel>
@@ -254,13 +265,13 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
                   defaultValue=""
                   onChange={handleChangeUnit}
                 >
-                  { rooms.map(item => (
+                  { units.map(item => (
                       <MenuItem value={item.ID} key={item.ID}>{item.name}</MenuItem>
                     ))
                   }
                 </Select>
               </FormControl>
-            </Grid>
+            </Grid>}{conditions != undefined &&
             <Grid item md={2}>
               <FormControl fullWidth>
                 <InputLabel id="select-condition-label">Kondisi</InputLabel>
@@ -270,13 +281,13 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
                   defaultValue=""
                   onChange={handleChangeCondition}
                 >
-                  { rooms.map(item => (
+                  { conditions.map(item => (
                       <MenuItem value={item.ID} key={item.ID}>{item.name}</MenuItem>
                     ))
                   }
                 </Select>
               </FormControl>
-            </Grid>
+            </Grid>}{rooms != undefined &&
             <Grid item md={2}>
               <FormControl fullWidth>
                 <InputLabel id="select-room-label">Ruang</InputLabel>
@@ -292,7 +303,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
                   }
                 </Select>
               </FormControl>
-            </Grid>
+            </Grid>}
           </Grid>
         </Grid>
         <Grid item md={2}>
@@ -377,6 +388,8 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
 PeriodInventoryPage.propTypes = {
   data: PropTypes.object,
   onExportData: PropTypes.func,
+  onChangeData: PropTypes.func,
+  onChangeFiltered: PropTypes.func,
   search: PropTypes.string,
   onGetData: PropTypes.func,
   onGetAdditionalData: PropTypes.func,
@@ -386,7 +399,8 @@ PeriodInventoryPage.propTypes = {
   goodsTypes: PropTypes.array,
   rooms: PropTypes.array,
   conditions: PropTypes.array,
-  periods: PropTypes.array
+  periods: PropTypes.array,
+  filtered: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -396,12 +410,15 @@ const mapStateToProps = createStructuredSelector({
   goodsTypes: makeSelectGoodsTypeList(),
   rooms: makeSelectRoomList(),
   conditions: makeSelectConditionList(),
-  periods: makeSelectPeriodList()
+  periods: makeSelectPeriodList(),
+  filtered: makeSelectFiltered()
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     onChangeSearch: payload => dispatch(changeSearch(payload)),
+    onChangeData: payload => dispatch(changeData(payload)),
+    onChangeFiltered: payload => dispatch(changeFiltered(payload)),
     onGetAdditionalData: evt => dispatch(getAdditionalData()),
     onExportData: evt => dispatch(exportData()),
     onGetData: evt => dispatch(getData()),

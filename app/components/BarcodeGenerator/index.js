@@ -71,7 +71,7 @@ function BarcodeGenerator({onHandleDetected, goodsTypes}) {
                                         <img src={bawasluLogo} height={75} />
                                     </div>
                                     <div style={{display:'flex', justifyContent: 'center', marginTop:'10px'}}>
-                                        <strong>{'bawaslusamawa-' + goodsType.value.code + "-" +String(i)} </strong>
+                                        <strong>{'bawaslu-' + goodsType.value.code + "-" +String(i)} </strong>
                                     </div>
                                 </Grid>
                         </Grid>

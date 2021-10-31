@@ -1,17 +1,17 @@
 // import { take, call, put, select } from 'redux-saga/effects';
 import { call, select, put, takeLatest } from '@redux-saga/core/effects';
 import request, {requestFile} from '../../utils/api';
-import { makeSelectData, makeSelectSearch } from './selectors';
+import { makeSelectData, makeSelectSearch, makeSelectFiltered } from './selectors';
 import { getDataSuccess, getDataFailed } from './actions';
 import { getList as getUnitList } from '../UnitPage/actions';
 import { getList as getRoomList } from '../RoomPage/actions';
 import { getList as getConditionList } from '../ConditionPage/actions';
 import { getList as getGoodsTypeList } from '../GoodsTypePage/actions';
 import { getList as getPeriodList } from '../PeriodPage/actions';
-import { GET_DATA, CHANGE_DATA, CHANGE_ROW, DELETE_ROW, EXPORT_DATA, GET_ADDITIONAL_DATA } from './constants';
+import { GET_DATA, CHANGE_DATA, CHANGE_ROW, DELETE_ROW, EXPORT_DATA, GET_ADDITIONAL_DATA, CHANGE_FILTERED } from './constants';
 import { changeNotifStatus, changeLoading } from '../Layouts/LayoutDashboard/actions';
 
-const key = 'inventories';
+const key = 'inventories-period';
 
 /**
  * Get Pagination Inventory Data
@@ -21,7 +21,10 @@ export function* getData() {
     yield put(changeLoading(true));
     const oldData = yield select(makeSelectData());
     const search = yield select(makeSelectSearch());
-    const url = key + '?search=' + search + '&page=' + oldData.current_page + '&page_size=' + oldData.per_page;
+    const filtered = yield select(makeSelectFiltered());
+    const url = key + '?search=' + search + '&page=' + oldData.current_page + '&page_size=' + oldData.per_page + 
+        '&goods-type=' + filtered.goodsType + '&unit=' + filtered.unit + '&room=' + filtered.room +
+        '&condition=' + filtered.condition + '&period=' + filtered.period;
 
     const data = yield call(request, "GET", url);
     yield put(getDataSuccess(data.Data));
@@ -134,7 +137,7 @@ export function* getData() {
  * Root saga manages watcher lifecycle
  */
  export default function* rootSaga() {
-  yield takeLatest([GET_DATA, CHANGE_DATA], getData);
+  yield takeLatest([GET_DATA, CHANGE_DATA, CHANGE_FILTERED], getData);
   yield takeLatest([CHANGE_ROW], setData);
   yield takeLatest([DELETE_ROW], deleteData);
   yield takeLatest([EXPORT_DATA], exportData);

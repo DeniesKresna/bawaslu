@@ -4,7 +4,7 @@
  *
  */
 import produce from 'immer';
-import { CHANGE_SEARCH, GET_DATA_SUCCESS } from './constants';
+import { CHANGE_SEARCH, GET_DATA_SUCCESS, CHANGE_FILTERED } from './constants';
 
 export const initialState = {
   data: {
@@ -18,11 +18,11 @@ export const initialState = {
   },
   search: '',
   filtered: {
-    unit: null,
-    goodsType: null,
-    room: null,
-    condition: null,
-    period: null
+    unit: 0,
+    goodsType: 0,
+    room: 0,
+    condition: 0,
+    period: 0
   },
   row: {}
 };
@@ -36,6 +36,9 @@ const inventoryReducer = (state = initialState, action) =>
         break;
       case CHANGE_SEARCH:
         draft.search = action.payload;
+        break;
+      case CHANGE_FILTERED:
+        draft.filtered = action.payload;
         break;
     }
   });

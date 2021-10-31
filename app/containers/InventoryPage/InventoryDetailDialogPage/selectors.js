@@ -14,9 +14,15 @@ const makeSelectRowData = () =>
   );
 
 const makeSelectIsBusy = () =>
-createSelector(
-  selectInventoryDetailDialogPageDomain,
-  substate => substate.busy
-);
+  createSelector(
+    selectInventoryDetailDialogPageDomain,
+    substate => substate.busy
+  );
 
-export { makeSelectRowData, makeSelectIsBusy };
+const makeSelectActivePeriod = () =>
+  createSelector(
+    selectInventoryDetailDialogPageDomain,
+    substate => substate.activePeriod
+  );
+
+export { makeSelectRowData, makeSelectIsBusy, makeSelectActivePeriod };

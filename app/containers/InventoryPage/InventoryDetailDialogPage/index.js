@@ -13,8 +13,8 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { makeSelectRowData, makeSelectIsBusy } from './selectors';
-import { getRowData } from './actions';
+import { makeSelectRowData, makeSelectIsBusy, makeSelectActivePeriod } from './selectors';
+import { getRowData, getActivePeriod, updateInventoryPeriod } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 
@@ -37,14 +37,20 @@ import {downloadDocs} from '../../../utils/helpers'
 
 import './style.css';
 
-export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, rowData, onGetRowData, dialogStatus }) {
+export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, rowData, onGetRowData, dialogStatus, onGetActivePeriod, activePeriod, onUpdateInventoryPeriod }) {
   useInjectReducer({ key: 'inventoryDetailDialogPage', reducer: reducer });
   useInjectSaga({ key: 'inventoryDetailDialogPage', saga: saga });
 
   useEffect(() => {
       rowData = {}
       onGetRowData(id);
+      onGetActivePeriod();
   }, [id]);
+
+  useEffect(() => {
+    if(rowData != null && rowData.Periods != undefined)
+      checkInventoryInActivePeriod();
+  },[activePeriod])
 
   const [active, setActive] = useState({value:false, error: false, helperText: ''});
 
@@ -53,23 +59,36 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
     let field = {...active}
     field.value = inputValue
     setActive(field);
+    onUpdateInventoryPeriod({inventory_id: rowData.ID, period_id: activePeriod.ID, add_mode: inputValue})
+  }
+
+  const checkInventoryInActivePeriod = () => {
+    rowData.Periods.every(item => {
+      if(item.ID == activePeriod.ID){
+        let field = {...active}
+        field.value = true
+        setActive(field);
+        return false;
+      }
+      return true;
+    });
   }
 
   return (
     <div>
-      {!isBusy &&
+      {!isBusy && rowData != null && Object.keys(rowData).length > 0 && 
       <Dialog open={dialogStatus} onClose={()=>{onHandleCloseDialog('cancel')}} maxWidth='lg' fullWidth={true} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Detail Inventaris</DialogTitle>
         <DialogContent>
           <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
                 <Grid container spacing={2}>
-                  <Grid item md={12}>
+                  {activePeriod &&  <Grid item md={12}>
                     <FormControlLabel
                       control={<Checkbox checked={active.value} onChange={onChangeActive} />}
-                      label="Masukkan di Periode Aktif?"
+                      label={"Masukkan di Periode " + activePeriod.name + "?"}
                     />
-                  </Grid>
+                  </Grid>}
                   <Grid item md={12}>
                     {rowData.imageUrl && <img src={serverBaseUrl + "medias?path=" + rowData.imageUrl} height="200"/>}
                   </Grid>
@@ -161,17 +180,23 @@ InventoryDetailDialogPage.propTypes = {
   rowData: PropTypes.object,
   onGetRowData: PropTypes.func,
   onHandleCloseDialog: PropTypes.func,
-  dialogStatus: PropTypes.bool
+  dialogStatus: PropTypes.bool,
+  onGetActivePeriod: PropTypes.func,
+  activePeriod: PropTypes.object,
+  onUpdateInventoryPeriod: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
   rowData: makeSelectRowData(),
-  isBusy: makeSelectIsBusy()
+  isBusy: makeSelectIsBusy(),
+  activePeriod: makeSelectActivePeriod()
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     onGetRowData: payload => dispatch(getRowData(payload)),
+    onGetActivePeriod: evt => dispatch(getActivePeriod()),
+    onUpdateInventoryPeriod: payload => dispatch(updateInventoryPeriod(payload))
   };
 }
 

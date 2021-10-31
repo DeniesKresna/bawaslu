@@ -47,7 +47,7 @@ export const deepClone = (val) => {
  export const dateTimeNow = () => {
     let d = new Date()
     let str = "";
-    let mt = d.getMonth();
+    let mt = d.getMonth()+1;
     if(mt < 10)
         mt = "0" + mt
     let dt = d.getDate()
