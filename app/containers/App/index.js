@@ -32,6 +32,13 @@ import UserPage from '../UserPage';
 import LoginPage from '../LoginPage';
 
 export default function App() {
+
+  const innerWidth = window.innerWidth;
+  if(innerWidth > 600 && innerWidth < 1800){
+    console.log("wow");
+    const zoomScale = innerWidth/1800*100;
+    document.body.style.zoom = zoomScale + "%";
+  }
   return (
     <div>
       <Switch>

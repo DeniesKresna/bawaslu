@@ -73,7 +73,7 @@ export function Sidebar() {
         <ListItemIcon>
           <EventNoteIcon />
         </ListItemIcon>
-        <ListItemText primary="Inventaris" />
+        <ListItemText primary="Inventarisasi" />
       </ListItem>
       <ListItem button component={Link} to="/admin/barcode">
         <ListItemIcon>

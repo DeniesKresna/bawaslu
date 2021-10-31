@@ -161,7 +161,7 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
             onClick={()=>{handleClickOperation('create')}}
           >
             Tambah
-          </Button>
+          </Button>{/*
           <Button
             variant="contained"
             color="primary"
@@ -169,7 +169,7 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
             onClick={()=>{handleClickOperation('export')}}
           >
             Export
-          </Button>
+          </Button>*/}
         </Grid>
       </Grid>
       <StyledTableContainer component={Paper}>

@@ -126,7 +126,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
   useInjectSaga({ key: 'conditionPage', saga: conditionSaga });
   useInjectReducer({ key: 'periodPage', reducer: periodReducer });
   useInjectSaga({ key: 'periodPage', saga: periodSaga });
-  const entity = "Inventaris Per Periode";
+  const entity = "Inventarisasi Per Periode";
 
   const delayedGetData = useCallback(debounce(onGetData, 2000), []); 
   useEffect(() => {
@@ -222,7 +222,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
     <div>
       <Helmet>
         <title>{entity}</title>
-        <meta name="description" content="Pengaturan Barang Inventaris per periode" />
+        <meta name="description" content="Pengaturan Barang Inventarisasi per periode" />
       </Helmet>
       <h1>Halaman {entity}</h1>
 
