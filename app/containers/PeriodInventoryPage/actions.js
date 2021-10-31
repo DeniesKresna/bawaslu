@@ -1,6 +1,6 @@
 /*
  *
- * InventoryPage actions
+ * PeriodInventoryPage actions
  *
  */
 

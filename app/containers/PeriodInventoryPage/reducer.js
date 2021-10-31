@@ -1,6 +1,6 @@
 /*
  *
- * InventoryPage reducer
+ * PeriodInventoryPage reducer
  *
  */
 import produce from 'immer';
@@ -28,7 +28,7 @@ export const initialState = {
 };
 
 /* eslint-disable default-case, no-param-reassign */
-const inventoryReducer = (state = initialState, action) =>
+const periodInventoryReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
       case GET_DATA_SUCCESS:
@@ -43,4 +43,4 @@ const inventoryReducer = (state = initialState, action) =>
     }
   });
 
-export default inventoryReducer;
+export default periodInventoryReducer;

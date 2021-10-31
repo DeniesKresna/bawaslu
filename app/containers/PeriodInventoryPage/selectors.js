@@ -5,23 +5,23 @@ import { initialState } from './reducer';
  * Direct selector to the inventory state domain
  */
 
-const selectInventoryPageDomain = state => state.inventoryPage || initialState;
+const selectPeriodInventoryPageDomain = state => state.periodInventoryPage || initialState;
 
 const makeSelectData = () =>
   createSelector(
-    selectInventoryPageDomain,
+    selectPeriodInventoryPageDomain,
     substate => substate.data
   );
 
 const makeSelectSearch = () =>
   createSelector(
-    selectInventoryPageDomain,
+    selectPeriodInventoryPageDomain,
     substate => substate.search
   );
 
 const makeSelectFiltered = () =>
   createSelector(
-    selectInventoryPageDomain,
+    selectPeriodInventoryPageDomain,
     substate => substate.filtered
   );
 

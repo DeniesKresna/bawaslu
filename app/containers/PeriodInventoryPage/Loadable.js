@@ -1,6 +1,6 @@
 /**
  *
- * Asynchronously loads the component for InventoryPage
+ * Asynchronously loads the component for PeriodInventoryPage
  *
  */
 

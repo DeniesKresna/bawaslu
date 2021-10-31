@@ -114,8 +114,8 @@ const useStyles = makeStyles((theme) => ({
 
 export function PeriodInventoryPage({ history, data, onExportData, search, onGetData, onChangeSearch, onChangeData, onChangeFiltered, onDeleteRow,
   units, goodsTypes, conditions, periods, rooms, onGetAdditionalData, filtered }) {
-  useInjectReducer({ key: 'inventoryPage', reducer });
-  useInjectSaga({ key: 'inventoryPage', saga });
+  useInjectReducer({ key: 'periodInventoryPage', reducer });
+  useInjectSaga({ key: 'periodInventoryPage', saga });
   useInjectReducer({ key: 'unitPage', reducer: unitReducer });
   useInjectSaga({ key: 'unitPage', saga: unitSaga });
   useInjectReducer({ key: 'roomPage', reducer: roomReducer });
