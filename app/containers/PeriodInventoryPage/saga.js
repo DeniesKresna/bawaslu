@@ -81,8 +81,8 @@ export function* getData() {
  export function* deleteData(action) {
   try {
     yield put(changeLoading(true));
-    const url = key;
-    const data = yield call(request, "DELETE", url + '/' + action.payload.ID);
+    const url = key + '/delete';
+    const data = yield call(request, "POST", url, action.payload);
     yield call(getData);
     yield put(changeNotifStatus({
       open: true,
@@ -105,10 +105,10 @@ export function* getData() {
 /**
  * Export Inventory Data
  */
- export function* exportData() {
+ export function* exportData(action) {
   try {
     yield put(changeLoading(true));
-    const url = key + "/getexcel"
+    const url = key + "/getexcel?period_id=" + action.payload
     const data = yield call(requestFile, "GET", url);
     yield put(changeLoading(false));
   } catch (error) {

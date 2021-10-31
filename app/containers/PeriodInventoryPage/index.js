@@ -168,11 +168,20 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
 
   const handleClickOperation = (mode, rowData=null) => {
     if(mode == 'delete'){
-      if(confirm("Hapus "+entity+" dari periode ini?")){
-        onDeleteRow(rowData);
+      let periodPicked = periods.find(obj => {
+        return obj.ID == period;
+      });
+      if(periodPicked){
+        if(confirm("Hapus "+entity+" dari periode " + periodPicked.name + "?")){
+          onDeleteRow({inventory_id:rowData.ID, period_id: period});
+        }
+      }else{
+        if(confirm("Hapus "+entity+" dari periode aktif?")){
+          onDeleteRow({inventory_id:rowData.ID, period_id: 0});
+        }
       }
     }else if(mode == 'export'){
-      onExportData()
+      onExportData(period)
     }else{
       setInventoryId(rowData.ID)
       setDialogStatus(true)
@@ -233,6 +242,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
                   defaultValue=""
                   onChange={handleChangePeriod}
                 >
+                  <MenuItem value={0}>Semua</MenuItem>
                   { periods.map(item => (
                       <MenuItem value={item.ID} key={item.ID}>{item.name}</MenuItem>
                     ))
@@ -249,6 +259,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
                   defaultValue=""
                   onChange={handleChangeGoodsType}
                 >
+                  <MenuItem value={0}>Semua</MenuItem>
                   { goodsTypes.map(item => (
                       <MenuItem value={item.ID} key={item.ID}>{item.name}</MenuItem>
                     ))
@@ -265,6 +276,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
                   defaultValue=""
                   onChange={handleChangeUnit}
                 >
+                  <MenuItem value={0}>Semua</MenuItem>
                   { units.map(item => (
                       <MenuItem value={item.ID} key={item.ID}>{item.name}</MenuItem>
                     ))
@@ -281,6 +293,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
                   defaultValue=""
                   onChange={handleChangeCondition}
                 >
+                  <MenuItem value={0}>Semua</MenuItem>
                   { conditions.map(item => (
                       <MenuItem value={item.ID} key={item.ID}>{item.name}</MenuItem>
                     ))
@@ -297,6 +310,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
                   defaultValue=""
                   onChange={handleChangeRoom}
                 >
+                  <MenuItem value={0}>Semua</MenuItem>
                   { rooms.map(item => (
                       <MenuItem value={item.ID} key={item.ID}>{item.name}</MenuItem>
                     ))
@@ -379,7 +393,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
         </Table>
       </StyledTableContainer>
     </div>
-    { inventoryId != null && <InventoryDetailDialogPage id={inventoryId} onHandleCloseDialog={handleCloseDialog} dialogStatus={dialogStatus} />
+    { inventoryId != null && <InventoryDetailDialogPage id={inventoryId} showPeriodActive={false} onHandleCloseDialog={handleCloseDialog} dialogStatus={dialogStatus} />
     }
     </div>
   );
@@ -420,7 +434,7 @@ function mapDispatchToProps(dispatch) {
     onChangeData: payload => dispatch(changeData(payload)),
     onChangeFiltered: payload => dispatch(changeFiltered(payload)),
     onGetAdditionalData: evt => dispatch(getAdditionalData()),
-    onExportData: evt => dispatch(exportData()),
+    onExportData: payload => dispatch(exportData(payload)),
     onGetData: evt => dispatch(getData()),
     onDeleteRow: payload => dispatch(deleteRow(payload))
   };

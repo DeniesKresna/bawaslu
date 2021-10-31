@@ -237,7 +237,7 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
         </Table>
       </StyledTableContainer>
     </div>
-    { inventoryId != null && <InventoryDetailDialogPage id={inventoryId} onHandleCloseDialog={handleCloseDialog} dialogStatus={dialogStatus} />
+    { inventoryId != null && <InventoryDetailDialogPage id={inventoryId} showPeriodActive={false} onHandleCloseDialog={handleCloseDialog} dialogStatus={dialogStatus} />
     }
     </div>
   );

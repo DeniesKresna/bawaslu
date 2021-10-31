@@ -37,11 +37,14 @@ import {downloadDocs} from '../../../utils/helpers'
 
 import './style.css';
 
-export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, rowData, onGetRowData, dialogStatus, onGetActivePeriod, activePeriod, onUpdateInventoryPeriod }) {
+export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, showPeriodActive, rowData, onGetRowData, dialogStatus, onGetActivePeriod, activePeriod, onUpdateInventoryPeriod }) {
   useInjectReducer({ key: 'inventoryDetailDialogPage', reducer: reducer });
   useInjectSaga({ key: 'inventoryDetailDialogPage', saga: saga });
 
   useEffect(() => {
+      if(showPeriodActive){
+        setActive(false);
+      }
       rowData = {}
       onGetRowData(id);
       onGetActivePeriod();
@@ -49,25 +52,23 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
 
   useEffect(() => {
     if(rowData != null && rowData.Periods != undefined)
-      checkInventoryInActivePeriod();
-  },[activePeriod])
+      if(showPeriodActive){
+        checkInventoryInActivePeriod();
+      }
+  }, [rowData]);
 
-  const [active, setActive] = useState({value:false, error: false, helperText: ''});
+  const [active, setActive] = useState(false);
 
   const onChangeActive = (event) => {
     const inputValue = event.target.checked
-    let field = {...active}
-    field.value = inputValue
-    setActive(field);
+    setActive(inputValue);
     onUpdateInventoryPeriod({inventory_id: rowData.ID, period_id: activePeriod.ID, add_mode: inputValue})
   }
 
   const checkInventoryInActivePeriod = () => {
     rowData.Periods.every(item => {
       if(item.ID == activePeriod.ID){
-        let field = {...active}
-        field.value = true
-        setActive(field);
+        setActive(true);
         return false;
       }
       return true;
@@ -83,10 +84,10 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, row
           <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
                 <Grid container spacing={2}>
-                  {activePeriod &&  <Grid item md={12}>
+                  {activePeriod && showPeriodActive && <Grid item md={12}>
                     <FormControlLabel
-                      control={<Checkbox checked={active.value} onChange={onChangeActive} />}
-                      label={"Masukkan di Periode " + activePeriod.name + "?"}
+                      control={<Checkbox checked={active} onChange={onChangeActive} />}
+                      label={"Periode Aktif " + activePeriod.name + "?"}
                     />
                   </Grid>}
                   <Grid item md={12}>
@@ -183,8 +184,13 @@ InventoryDetailDialogPage.propTypes = {
   dialogStatus: PropTypes.bool,
   onGetActivePeriod: PropTypes.func,
   activePeriod: PropTypes.object,
-  onUpdateInventoryPeriod: PropTypes.func
+  onUpdateInventoryPeriod: PropTypes.func,
+  showPeriodActive: PropTypes.bool
 };
+
+InventoryDetailDialogPage.defaultProps = {
+  showPeriodActive: true
+}
 
 const mapStateToProps = createStructuredSelector({
   rowData: makeSelectRowData(),

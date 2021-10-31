@@ -104,11 +104,14 @@ export function changeData(payload) {
 /**
  * Export the whole Data
  *
+ * @param  {object} payload
+ *
  * @return {object} An action object with a type of EXPORT_DATA
  */
- export function exportData() {
+ export function exportData(payload) {
   return {
     type: EXPORT_DATA,
+    payload
   };
 }
 
