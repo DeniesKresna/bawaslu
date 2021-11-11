@@ -13,9 +13,12 @@ import { Link } from "react-router-dom";
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import { makeSelectUser } from '../../LoginPage/selectors';
 import makeSelectSidebar from './selectors';
 import reducer from './reducer';
 import saga from './saga';
+import loginReducer from '../../LoginPage/reducer';
+import loginSaga from '../../LoginPage/saga'
 
 import { makeStyles } from '@material-ui/core/styles';
 import Collapse from '@material-ui/core/Collapse';
@@ -44,9 +47,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function Sidebar() {
+export function Sidebar({user}) {
   useInjectReducer({ key: 'sidebar', reducer });
   useInjectSaga({ key: 'sidebar', saga });
+  useInjectReducer({ key: 'loginPage', reducer: loginReducer });
+  useInjectSaga({ key: 'loginPage', saga: loginSaga });
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -54,7 +59,6 @@ export function Sidebar() {
   const handleSettingClick = () => {
     setOpen(!open);
   }
-
   return (
     <div>
       <ListItem button component={Link} to="/admin/home">
@@ -81,14 +85,15 @@ export function Sidebar() {
         </ListItemIcon>
         <ListItemText primary="Barcode" />
       </ListItem>
-      <ListItem button onClick={handleSettingClick}>
+      { user.Role.name == 'administrator' && <ListItem button onClick={handleSettingClick}>
         <ListItemIcon>
           <SettingsIcon />
         </ListItemIcon>
         <ListItemText primary="Pengaturan" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      }
+      { user.Role.name == 'administrator' && <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           <ListItem button className={classes.nested} component={Link} to="/admin/unit">
             <ListItemIcon>
@@ -137,7 +142,7 @@ export function Sidebar() {
             <ListItemText primary="Pengguna" />
           </ListItem>
         </List>
-      </Collapse>
+      </Collapse>}
       <ListItem button>
         <ListItemIcon>
           <HelpIcon />
@@ -150,9 +155,11 @@ export function Sidebar() {
 
 Sidebar.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  user: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
+  user: makeSelectUser(),
   sidebar: makeSelectSidebar(),
 });
 
