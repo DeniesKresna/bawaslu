@@ -58,7 +58,7 @@ export function HistoryPage({ inventoryId, roomList, conditionList, data, search
   const columnViewed = ['Number','description','updater_name','entity_type','updated_at','operation'];
 
   const handleChangePage = (event, newPage) => {
-    data.current_page = newPage;
+    data.current_page = newPage+1;
     onChangeData(data);
   };
 

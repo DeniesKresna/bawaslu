@@ -152,7 +152,7 @@ export function PeriodInventoryPage({ history, data, onExportData, search, onGet
   const tableData = normalizeData(data);
 
   const handleChangePage = (event, newPage) => {
-    data.current_page = newPage;
+    data.current_page = newPage+1;
     onChangeData(data);
   };
 

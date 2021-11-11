@@ -57,7 +57,7 @@ export function PeriodPage({ data, search, onGetData, onChangeSearch, onChangeDa
   const columnViewed = ['Number','updater','start_time','active','updated_at','operation'];
 
   const handleChangePage = (event, newPage) => {
-    data.current_page = newPage;
+    data.current_page = newPage+1;
     onChangeData(data);
   };
 

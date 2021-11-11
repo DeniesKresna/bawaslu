@@ -54,7 +54,7 @@ export function GoodsTypePage({ data, search, onGetData, onChangeSearch, onChang
   const columnViewed = ['Number','name','code','updater','updated_at','operation'];
 
   const handleChangePage = (event, newPage) => {
-    data.current_page = newPage;
+    data.current_page = newPage+1;
     onChangeData(data);
   };
 

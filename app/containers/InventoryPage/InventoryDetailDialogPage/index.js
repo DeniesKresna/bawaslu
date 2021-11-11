@@ -145,13 +145,13 @@ export function InventoryDetailDialogPage({ id, onHandleCloseDialog, isBusy, sho
                     Dokumen Pengadaan
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <strong>{rowData.hasOwnProperty('procurementDocUrl') && <a onClick={() => {downloadDocs(serverBaseUrl + "documents?path=" + rowData.procurementDocUrl)}}>Download</a> }</strong>
+                    <strong>{rowData.hasOwnProperty('procurementDocUrl') && <a href={serverBaseUrl + "/ivt?inventoryId=" + rowData.ID + "&docType=procurement"} target="_blank">Download</a> }</strong>
                   </Grid>
                   <Grid item md={6} xs={12}>
                     Dokumen Penetapan Status
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <strong>{rowData.hasOwnProperty('statusDocUrl')&& <a href={serverBaseUrl + "documents?path=" + rowData.statusDocUrl}>Download</a> }</strong>
+                    <strong>{rowData.hasOwnProperty('statusDocUrl')&& <a href={serverBaseUrl + "/ivt?inventoryId=" + rowData.ID + "&docType=status"} target="_blank">Download</a> }</strong>
                   </Grid>
                 </Grid>
             </Grid>

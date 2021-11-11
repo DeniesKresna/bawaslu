@@ -106,7 +106,7 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
   const tableData = normalizeData(data);
 
   const handleChangePage = (event, newPage) => {
-    data.current_page = newPage;
+    data.current_page = newPage+1;
     onChangeData(data);
   };
 
@@ -137,6 +137,7 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
       setDialogStatus(true)
     }
   }
+  console.log(tableData)
 
   return (
     <div>
@@ -221,7 +222,7 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
               <TableRow>
                 <TablePagination
                   colSpan={3}
-                  count={tableData.data.length}
+                  count={tableData.total}
                   rowsPerPage={tableData.per_page}
                   page={tableData.current_page-1}
                   SelectProps={{

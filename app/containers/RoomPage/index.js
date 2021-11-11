@@ -55,7 +55,7 @@ export function RoomPage({ data, search, onGetData, onChangeSearch, onChangeData
   const columnViewed = ['Number','name','updater','updated_at','operation'];
 
   const handleChangePage = (event, newPage) => {
-    data.current_page = newPage;
+    data.current_page = newPage+1;
     onChangeData(data);
   };
 

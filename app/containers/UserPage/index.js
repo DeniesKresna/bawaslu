@@ -112,7 +112,7 @@ export function InventoryPage({ data, roles, search, onGetData, onGetRoles, onCh
   const tableData = normalizeData(data);
 
   const handleChangePage = (event, newPage) => {
-    data.current_page = newPage;
+    data.current_page = newPage+1;
     onChangeData(data);
   };
 

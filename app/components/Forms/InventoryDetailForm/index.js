@@ -39,9 +39,9 @@ function InventoryDetailForm({
   const [imageReceive, setImageReceive] = useState({value:'', error: false, helperText: ''});
   const [imageReceiveUrl, setImageReceiveUrl] = useState(null);
   const [procurementDoc, setProcurementDoc] = useState({value:'', error: false, helperText: ''});
-  const [procurementDocUrl, setProcurementDocUrl] = useState(rowDataCopy.procurementDocUrl != ""?serverBaseUrl + 'documents?path=' + rowDataCopy.procurementDocUrl:null);
+  const [procurementDocUrl, setProcurementDocUrl] = useState(rowDataCopy.procurementDocUrl != ""?serverBaseUrl + 'ivt?path=' + rowDataCopy.procurementDocUrl:null);
   const [statusDoc, setStatusDoc] = useState({value:'', error: false, helperText: ''});
-  const [statusDocUrl, setStatusDocUrl] = useState(rowDataCopy.statusDocUrl != ""?serverBaseUrl + 'documents?path=' + rowDataCopy.statusDocUrl:null);
+  const [statusDocUrl, setStatusDocUrl] = useState(rowDataCopy.statusDocUrl != ""?serverBaseUrl + 'ivt?path=' + rowDataCopy.statusDocUrl:null);
   const [moveDescription, setDescriptionMove] = useState({value:'', error:false, helperText: ''})
   const [moveTime, setMoveTime] = useState({value:dateTimeNow(), error:false, helperText: ''})
   const [yearList, setYearList] = useState([]);
@@ -317,6 +317,14 @@ function InventoryDetailForm({
     return item || {};
   }
 
+  const downloadFile = async (path) => {
+    try{
+      const ok = await request("POST", "ivt", {path: path});
+    }catch(error){
+      alert(error);
+    }
+  }
+
   return (
     <div>
       <h3>{title}</h3>
@@ -402,7 +410,7 @@ function InventoryDetailForm({
               { procurementDoc.error && procurementDoc.helperText }
             </Button>
           </label>
-          {procurementDocUrl && <small> <a href={procurementDocUrl} target="_blank">[{procurementDocUrl.split('/').slice(-1)[0]}]</a> </small>}
+          {procurementDocUrl && <small> <a href={serverBaseUrl + "/ivt?inventoryId=" + rowData.ID + "&docType=procurement"} target="_blank">Download</a> </small>}
         </Grid>
         <Grid item md={12}>
           <input accept="application/msword, application/pdf" id="icon-button-status" type="file" style={{ display: 'none' }} onChange={onChangeStatusDoc}/>
@@ -412,7 +420,7 @@ function InventoryDetailForm({
               { statusDoc.error && statusDoc.helperText }
             </Button>
           </label>
-          {statusDocUrl && <small><a href={statusDocUrl} target="_blank">[{statusDocUrl.split('/').slice(-1)[0]}]</a></small>}
+          {statusDocUrl && <small><a href={serverBaseUrl + "/ivt?inventoryId=" + rowData.ID + "&docType=status"} target="_blank">Download</a> </small>}
         </Grid>
         {/*entityMode == 'create' && <Grid item md={12}>
             <TextField label='Deskripsi Pengadaan' value={moveDescription.value || ''} onChange={onChangeMoveDescription} error={moveDescription.error} helperText={moveDescription.helperText} fullWidth/>

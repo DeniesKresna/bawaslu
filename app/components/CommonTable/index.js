@@ -192,7 +192,7 @@ function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onCh
               <TableRow>
                 <TablePagination
                   colSpan={3}
-                  count={tableData.data.length}
+                  count={tableData.total}
                   rowsPerPage={tableData.per_page}
                   page={tableData.current_page-1}
                   SelectProps={{
