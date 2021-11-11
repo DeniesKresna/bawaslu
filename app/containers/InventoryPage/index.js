@@ -137,7 +137,6 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
       setDialogStatus(true)
     }
   }
-  console.log(tableData)
 
   return (
     <div>

@@ -56,7 +56,6 @@ export function* getData() {
     }));
     yield put(changeLoading(false));
   } catch (error) {
-    console.log(error)
     yield put(changeNotifStatus({
       open: true,
       title: 'Gagal',

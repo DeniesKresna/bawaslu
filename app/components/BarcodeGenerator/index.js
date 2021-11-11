@@ -37,7 +37,6 @@ function BarcodeGenerator({onHandleDetected, goodsTypes}) {
           field.helperText = ""
         }
         field.value = inputValue
-        console.log(inputValue)
         setGoodsType(field);
       }
 
