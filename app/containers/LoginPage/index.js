@@ -92,7 +92,7 @@ export function LoginPage({ onGetUser, message, isLoading }) {
                   <img src={logo} style={{maxWidth: "80px"}}/>
                 </Grid>
                 <Grid item xs={10}>
-                  <div style={{color:"white"}}><h1>Sistem aplikasi manajemen aset Bawaslu Daerah Istimewa Yogyakarta - SAMAWA</h1></div>
+                  <div style={{color:"white"}}><h1>Sistem Aplikasi Manajemen Aset Bawaslu Daerah Istimewa Yogyakarta - SAMAWA</h1></div>
                 </Grid>
               </Grid>
             </Grid>
