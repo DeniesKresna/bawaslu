@@ -28,6 +28,7 @@ import ConditionPage from '../ConditionPage';
 import PeriodInventory from '../PeriodInventoryPage';
 import PeriodPage from '../PeriodPage';
 import UserPage from '../UserPage';
+import SurveyPage from '../SurveyPage';
 
 import LoginPage from '../LoginPage';
 
@@ -65,6 +66,7 @@ export default function App() {
               <Route exact path="/admin/inventory" component={ Inventory } />
               <Route exact path="/admin/inventory-period" component={ PeriodInventory } />
               <Route exact path="/admin/inventory/create" component={ InventoryDetail } />
+              <Route exact path="/admin/survey" component={ SurveyPage } />
               <Route path="/admin/inventory/detail" component={ InventoryDetail } />
               <Route component={NotFoundPage} />
             </Switch>

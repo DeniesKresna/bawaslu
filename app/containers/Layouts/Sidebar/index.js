@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -13,12 +13,10 @@ import { Link } from "react-router-dom";
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { makeSelectUser } from '../../LoginPage/selectors';
-import makeSelectSidebar from './selectors';
+import { getUser} from './actions';
+import {makeSelectUser} from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import loginReducer from '../../LoginPage/reducer';
-import loginSaga from '../../LoginPage/saga'
 
 import { makeStyles } from '@material-ui/core/styles';
 import Collapse from '@material-ui/core/Collapse';
@@ -40,6 +38,8 @@ import AmpStoriesIcon from '@material-ui/icons/AmpStories';
 import BrokenImageIcon from '@material-ui/icons/BrokenImage';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import EventNoteIcon from '@material-ui/icons/EventNote';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 
 const useStyles = makeStyles((theme) => ({
   nested: {
@@ -47,17 +47,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function Sidebar({user}) {
+export function Sidebar({onGetUser, user}) {
   useInjectReducer({ key: 'sidebar', reducer });
   useInjectSaga({ key: 'sidebar', saga });
-  useInjectReducer({ key: 'loginPage', reducer: loginReducer });
-  useInjectSaga({ key: 'loginPage', saga: loginSaga });
+
+  useEffect(() => {
+    onGetUser();
+  }, []);
 
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
 
   const handleSettingClick = () => {
     setOpen(!open);
+  }
+  const handleHelpClick = () => {
+    setHelpOpen(!helpOpen);
+  }
+
+  const isAdmin = () => {
+    if(user.Role != undefined){
+      if(user.Role.name == 'administrator'){
+        return true;
+      }
+    }
+    return false;
   }
   return (
     <div>
@@ -85,7 +100,7 @@ export function Sidebar({user}) {
         </ListItemIcon>
         <ListItemText primary="Barcode" />
       </ListItem>
-      { user.Role.name == 'administrator' && <ListItem button onClick={handleSettingClick}>
+      { isAdmin() && <ListItem button onClick={handleSettingClick}>
         <ListItemIcon>
           <SettingsIcon />
         </ListItemIcon>
@@ -93,7 +108,7 @@ export function Sidebar({user}) {
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       }
-      { user.Role.name == 'administrator' && <Collapse in={open} timeout="auto" unmountOnExit>
+      { isAdmin() && <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           <ListItem button className={classes.nested} component={Link} to="/admin/unit">
             <ListItemIcon>
@@ -143,29 +158,46 @@ export function Sidebar({user}) {
           </ListItem>
         </List>
       </Collapse>}
-      <ListItem button>
+      <ListItem button onClick={handleHelpClick}>
         <ListItemIcon>
           <HelpIcon />
         </ListItemIcon>
         <ListItemText primary="Help Desk" />
+        {helpOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
+      <Collapse in={helpOpen} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+            <ListItem button className={classes.nested} component={Link} to="/admin/survey">
+              <ListItemIcon>
+                <FormatListBulletedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Kuesioner" />
+            </ListItem>
+        </List>{
+        <List component="div" disablePadding>
+            <ListItem button className={classes.nested} component="a" href='https://drive.google.com/file/d/1sZlWRGfjwgaa_n7qFrnPqoPZsJ4vReW1/view?usp=sharing' target="_blank">
+              <ListItemIcon>
+                <MenuBookIcon />
+              </ListItemIcon>
+              <ListItemText primary="Manual Book" />
+            </ListItem>
+        </List>}
+      </Collapse>
     </div>
   );
 }
 
 Sidebar.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   user: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
   user: makeSelectUser(),
-  sidebar: makeSelectSidebar(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    onGetUser: evt => dispatch(getUser()),
   };
 }
 

@@ -410,7 +410,7 @@ function InventoryDetailForm({
               { procurementDoc.error && procurementDoc.helperText }
             </Button>
           </label>
-          {procurementDocUrl && <small> <a href={serverBaseUrl + "/ivt?inventoryId=" + rowData.ID + "&docType=procurement"} target="_blank">Download</a> </small>}
+          {procurementDocUrl && <small> <a href={serverBaseUrl + "ivt?inventoryId=" + rowData.ID + "&docType=procurement"} target="_blank">Download</a> </small>}
         </Grid>
         <Grid item md={12}>
           <input accept="application/msword, application/pdf" id="icon-button-status" type="file" style={{ display: 'none' }} onChange={onChangeStatusDoc}/>
@@ -420,7 +420,7 @@ function InventoryDetailForm({
               { statusDoc.error && statusDoc.helperText }
             </Button>
           </label>
-          {statusDocUrl && <small><a href={serverBaseUrl + "/ivt?inventoryId=" + rowData.ID + "&docType=status"} target="_blank">Download</a> </small>}
+          {statusDocUrl && <small><a href={serverBaseUrl + "ivt?inventoryId=" + rowData.ID + "&docType=status"} target="_blank">Download</a> </small>}
         </Grid>
         {/*entityMode == 'create' && <Grid item md={12}>
             <TextField label='Deskripsi Pengadaan' value={moveDescription.value || ''} onChange={onChangeMoveDescription} error={moveDescription.error} helperText={moveDescription.helperText} fullWidth/>

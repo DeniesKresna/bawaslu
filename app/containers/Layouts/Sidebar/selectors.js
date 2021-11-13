@@ -21,5 +21,10 @@ const makeSelectSidebar = () =>
     substate => substate,
   );
 
-export default makeSelectSidebar;
-export { selectSidebarDomain };
+const makeSelectUser = () =>
+  createSelector(
+    selectSidebarDomain,
+    substate => substate.user
+  );
+
+export { makeSelectUser };

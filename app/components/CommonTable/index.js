@@ -74,10 +74,22 @@ const StyledTableContainer = withStyles((theme) => ({
   },
 }))(TableContainer);
 
-function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onChangeSearch, onChangePage, onChangeRowsPerPage, onOperationClick}) {
+function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, canBeCreate, onChangeSearch, onChangePage, onChangeRowsPerPage, onOperationClick}) {
   
   const [imageUrl, setImageUrl] = useState('');
   const [dialogStatus, setDialogStatus] = useState(false);
+
+  const getSurveyValue = (num) => {
+    if(num == 1){
+      return "Tidak Setuju"
+    }else if(num == 2){
+      return "Kurang Setuju"
+    }else if(num == 3){
+      return "Setuju"
+    }else{
+      return "Sangat Setuju"
+    }
+  }
 
   const renderHeadColumns = col => {
     switch(col){
@@ -99,6 +111,16 @@ function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onCh
         return <StyledTableCell key={col} align="right">Perubahan</StyledTableCell>
       case 'code':
         return <StyledTableCell key={col} align="right">Kode</StyledTableCell>
+      case 'easyUse':
+        return <StyledTableCell key={col} align="right">Penggunaan</StyledTableCell>
+      case 'easyHelp':
+        return <StyledTableCell key={col} align="right">Kemudahan</StyledTableCell>
+      case 'easyData':
+        return <StyledTableCell key={col} align="right">Pendataan</StyledTableCell>
+      case 'faster':
+        return <StyledTableCell key={col} align="right">Kecepatan</StyledTableCell>
+      case 'input':
+        return <StyledTableCell key={col} align="right">Masukkan</StyledTableCell>
       case 'image_url':
         return <StyledTableCell key={col} align="right">Gambar</StyledTableCell>
       case 'start_time':
@@ -117,6 +139,22 @@ function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onCh
       case 'start_time':
         return (<StyledTableCell key={col} align="right">
           {readableDateHour(row.start_time)}
+        </StyledTableCell>)
+      case 'easyUse':
+        return (<StyledTableCell key={col} align="right">
+          {getSurveyValue(row.easyUse)}
+        </StyledTableCell>)
+      case 'easyData':
+        return (<StyledTableCell key={col} align="right">
+          {getSurveyValue(row.easyData)}
+        </StyledTableCell>)
+      case 'easyHelp':
+        return (<StyledTableCell key={col} align="right">
+          {getSurveyValue(row.easyHelp)}
+        </StyledTableCell>)
+      case 'faster':
+        return (<StyledTableCell key={col} align="right">
+          {getSurveyValue(row.faster)}
         </StyledTableCell>)
       case 'updater':
         return <StyledTableCell key={col} align="right">{row.Updater.name}</StyledTableCell>
@@ -159,6 +197,7 @@ function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onCh
         <Grid item md={7}>
         </Grid>
         <Grid item md={2}>
+          {canBeCreate &&
           <Button
             variant="contained"
             color="secondary"
@@ -167,6 +206,7 @@ function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, onCh
           >
             Tambah
           </Button>
+          }
         </Grid>
       </Grid>
       <StyledTableContainer component={Paper}>
@@ -228,10 +268,15 @@ CommonTable.propTypes = {
   search: PropTypes.string,
   canBeUpdate: PropTypes.bool,
   canBeDelete: PropTypes.bool,
+  canBeCreate: PropTypes.bool,
   onChangeSearch: PropTypes.func,
   onChangePage: PropTypes.func,
   onChangeRowsPerPage: PropTypes.func,
   onOperationClick: PropTypes.func
 };
+
+CommonTable.defaultProps = {
+  canBeCreate: true
+}
 
 export default memo(CommonTable);
