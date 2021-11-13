@@ -47,12 +47,12 @@ export function BarcodePage({ history, data, isLoading, onChangeDataExist, onGet
   const handleDetected = res => {
     setShowScan(false)
     const resString = String(res)
-    if(resString.includes("bawaslusamawa-")){
+    if(resString.includes("bawaslusamari-")){
       const splitRes = resString.split("-")
       onGetData({code:splitRes[1], nup:splitRes[2]})
       setDialogStatus(true)
     }else{
-      alert("ini bukan barcode SAMAWA")
+      alert("ini bukan barcode SAMARI")
     }
   }
 

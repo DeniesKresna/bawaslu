@@ -40,8 +40,8 @@ function Copyright(props) {
     <Typography variant="body2" align="center" {...props}>
       <br />
       {'Copyright © '}
-      <Link color="inherit" href="https://yogyakarta.bawaslu.go.id">
-        Bawaslu DIY
+      <Link color="inherit" href="https://riau.bawaslu.go.id">
+        Bawaslu RIAU
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -92,7 +92,7 @@ export function LoginPage({ onGetUser, message, isLoading }) {
                   <img src={logo} style={{maxWidth: "80px"}}/>
                 </Grid>
                 <Grid item xs={10}>
-                  <div style={{color:"white"}}><h1>Sistem aplikasi manajemen aset Bawaslu Daerah Istimewa Yogyakarta - SAMAWA</h1></div>
+                  <div style={{color:"white"}}><h1>Sistem aplikasi manajemen aset Bawaslu RIAU - SAMARI</h1></div>
                 </Grid>
               </Grid>
             </Grid>
@@ -154,7 +154,7 @@ export function LoginPage({ onGetUser, message, isLoading }) {
                   </Button>
                   <Grid container style={{marginTop: "5px"}}>
                     <Grid item xs>
-                      <Link href="https://wa.me/+6283863980461" target="_blank" variant="body2">
+                      <Link href="https://wa.me/+6285265339110" target="_blank" variant="body2">
                         Masalah Akun? Hubungi administrator
                       </Link>
                     </Grid>

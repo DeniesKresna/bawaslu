@@ -62,7 +62,7 @@ function BarcodeGenerator({onHandleDetected, goodsTypes}) {
                         <Grid container style={{border: "solid 1px black"}}>
                                 <Grid item xs={4}>
                                     <QRcode 
-                                        value={'bawaslusamawa-' + goodsType.value.code + "-" +String(i)} 
+                                        value={'bawaslusamari-' + goodsType.value.code + "-" +String(i)} 
                                     />
                                 </Grid>
                                 <Grid item xs={8}>

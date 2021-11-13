@@ -67,8 +67,8 @@ function Copyright() {
     <Typography variant="body2" align="center">
       <br />
       {'Copyright © '}
-      <Link color="inherit" href="https://yogyakarta.bawaslu.go.id">
-        Bawaslu DIY
+      <Link color="inherit" href="https://riau.bawaslu.go.id">
+        Bawaslu RIAU
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -301,7 +301,7 @@ export function LayoutDashboard({ children, notifStatus, isLoading, onNotifChang
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            SAMAWA
+            SAMARI
           </Typography>
           <IconButton color="inherit" onClick={handleAccountClick}>{/*}
             <Badge badgeContent={4} color="secondary">

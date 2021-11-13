@@ -32,7 +32,7 @@ export function HomePage({user}) {
         <meta name="description" content="Description of HomePage" />
       </Helmet>
       <h1>Selamat Datang {user.name}</h1>
-      <p>Aplikasi ini digunakan untuk pengaturan Inventaris Bawaslu Yogyakarta. Anda dapat mempelajari aplikasi ini dengan cara:</p>
+      <p>Aplikasi ini digunakan untuk pengaturan Inventaris Bawaslu Riau. Anda dapat mempelajari aplikasi ini dengan cara:</p>
       <ul>
         <li>Mendownload Guide book di halaman help Desk</li>
         <li>Menanyakan pada administrator tentang cara penggunaannya</li>

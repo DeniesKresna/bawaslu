@@ -12,12 +12,13 @@ import background from '../../../images/background.jpg';
 
 export function LayoutEmpty({ children }) {
   return (
-    
+    /*
     <div style={{backgroundImage: `url(${background})`,backgroundPosition: 'center',
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
       minHeight: '1000px'}}
-    >
+    >*/
+    <div>
       { children }
     </div>
     );
