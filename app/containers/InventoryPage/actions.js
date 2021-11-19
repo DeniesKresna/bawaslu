@@ -4,7 +4,7 @@
  *
  */
 
-import { CHANGE_DATA, CHANGE_SEARCH, GET_DATA, GET_DATA_SUCCESS, CHANGE_ROW, DELETE_ROW, EXPORT_DATA } from './constants';
+import { CHANGE_DATA, CHANGE_SEARCH, GET_DATA, GET_DATA_SUCCESS, CHANGE_ROW, DELETE_ROW, EXPORT_DATA, CHANGE_FILTERED, GET_ADDITIONAL_DATA } from './constants';
 
 /**
  * Changes the entity data
@@ -30,6 +30,20 @@ export function changeData(payload) {
  export function changeSearch(payload) {
   return {
     type: CHANGE_SEARCH,
+    payload
+  };
+}
+
+/**
+ * Changes the Filtered
+ *
+ * @param  {string} payload
+ *
+ * @return {object} An action object with a type of CHANGE_FILTERED
+ */
+ export function changeFiltered(payload) {
+  return {
+    type: CHANGE_FILTERED,
     payload
   };
 }
@@ -95,5 +109,16 @@ export function changeData(payload) {
  export function exportData() {
   return {
     type: EXPORT_DATA,
+  };
+}
+
+/**
+ * Get the additional data
+ *
+ * @return {object} An action object with a type of GET_ADDITIONAL_DATA
+ */
+ export function getAdditionalData() {
+  return {
+    type: GET_ADDITIONAL_DATA,
   };
 }

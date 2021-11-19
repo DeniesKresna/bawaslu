@@ -98,7 +98,7 @@ export function Sidebar({onGetUser, user}) {
         <ListItemIcon>
           <CropFreeIcon />
         </ListItemIcon>
-        <ListItemText primary="Barcode" />
+        <ListItemText primary="QR Code" />
       </ListItem>
       { isAdmin() && <ListItem button onClick={handleSettingClick}>
         <ListItemIcon>

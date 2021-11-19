@@ -78,17 +78,18 @@ const handleToggleGenerate = () => {
     <div>
       <Helmet>
         <title>{entity}</title>
-        <meta name="description" content="Halaman Barcode" />
+        <meta name="description" content="Halaman QR Code" />
       </Helmet>
-      <h1>{entity}</h1>
+      <h1>QR Code</h1>
       <Grid>
           <Button
             variant="contained"
             color="secondary"
             startIcon={<AspectRatioIcon />}
             onClick={handleToggleScan}
+            style={{marginRight:"5px"}}
           >
-            Scan Barcode
+            Scan QR Code
           </Button>
 
           <Button
@@ -96,9 +97,8 @@ const handleToggleGenerate = () => {
             color="primary"
             startIcon={<PrintIcon />}
             onClick={handleToggleGenerate}
-            style={{marginLeft:"5px"}}
           >
-            Generate Barcode
+            Generate QR Code
           </Button>
         {showScan && <BarcodeScanner onHandleDetected={handleDetected} />}
         {showGenerate && <BarcodeGenerator goodsTypes={goodsTypeData} />}

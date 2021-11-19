@@ -19,4 +19,10 @@ const makeSelectSearch = () =>
     substate => substate.search
   );
 
-export { makeSelectData, makeSelectSearch };
+const makeSelectFiltered = () =>
+  createSelector(
+    selectInventoryPageDomain,
+    substate => substate.filtered
+  );
+
+export { makeSelectData, makeSelectSearch, makeSelectFiltered };
