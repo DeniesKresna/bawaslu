@@ -17,6 +17,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 function HistoryDetailForm({
   title, rowData, roomList, conditionList, onSubmitForm, entityMode
@@ -46,7 +47,7 @@ function HistoryDetailForm({
   const [entityType, setEntityType] = useState({value:rowDataCopy.entity_type, error: false, helperText: ''});
   const [entityId, setEntityId] = useState({value:getEntityId(), error: false, helperText: ''});
   const [image, setImage] = useState({value:'', error: false, helperText: ''});
-  const [imageUrl, setImageUrl] = useState(rowDataCopy.image_url != ""?serverBaseUrl + 'medias?path=' + rowDataCopy.image_url:null);
+  const [imageUrl, setImageUrl] = useState((rowDataCopy.imageUrl == "" || entityMode == 'create') ? null : serverBaseUrl + 'medias?path=' + rowDataCopy.imageUrl);
   const [description, setDescription] = useState({value:rowDataCopy.description, error:false, helperText: ''})
   const [moveTime, setMoveTime] = useState({value:getHistoryTime(), error:false, helperText: ''})
   
@@ -116,6 +117,15 @@ function HistoryDetailForm({
     field.value = inputValue
     setImageUrl(URL.createObjectURL(inputValue));
     setImage(field);
+  }
+
+  const removePicture = () => {
+    let field = {
+      error : false,
+      helperText : ""
+    }
+    setImage(field);
+    setImageUrl(null);
   }
 
   const onChangeMoveTime = (event) => {
@@ -197,9 +207,9 @@ function HistoryDetailForm({
           </label>
         </Grid>
         {
-          imageUrl != null && <Grid item md={12}>
-            <img src={imageUrl} height="200" />
-          </Grid>
+          imageUrl? <Grid item md={12}>
+            <img src={imageUrl} height="200" /><br /><span onClick={removePicture}><HighlightOffIcon/>Delete</span>
+          </Grid> : "-"
         }
 
         <Grid item md={12}>
