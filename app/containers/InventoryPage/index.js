@@ -15,10 +15,22 @@ import _, { debounce } from 'lodash';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { makeSelectData, makeSelectSearch } from './selectors';
-import { changeSearch, changeData, getData, deleteRow, exportData } from './actions';
+import { makeSelectData, makeSelectSearch, makeSelectFiltered } from './selectors';
+import { changeSearch, changeData, getData, getAdditionalData, deleteRow, exportData, changeFiltered } from './actions';
+import { makeSelectList as makeSelectUnitList } from '../UnitPage/selectors';
+import { makeSelectList as makeSelectRoomList } from '../RoomPage/selectors';
+import { makeSelectList as makeSelectGoodsTypeList } from '../GoodsTypePage/selectors';
+import { makeSelectList as makeSelectConditionList } from '../ConditionPage/selectors';
 import reducer from './reducer';
 import saga from './saga';
+import unitReducer from '../UnitPage/reducer';
+import unitSaga from '../UnitPage/saga';
+import roomReducer from '../RoomPage/reducer';
+import roomSaga from '../RoomPage/saga';
+import goodsTypeReducer from '../GoodsTypePage/reducer';
+import goodsTypeSaga from '../GoodsTypePage/saga';
+import conditionReducer from '../ConditionPage/reducer';
+import conditionSaga from '../ConditionPage/saga';
 
 import { readableDate, normalizeData } from '../../utils/helpers';
 
@@ -40,6 +52,11 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import red from '@material-ui/core/colors/red';
@@ -82,19 +99,33 @@ const StyledTableContainer = withStyles((theme) => ({
   },
 }))(TableContainer);
 
-export function InventoryPage({ history, data, onExportData, search, onGetData, onChangeSearch, onChangeData, onDeleteRow }) {
+export function InventoryPage({ history, data, onExportData, search, onGetData, onChangeSearch, onChangeData, onChangeFiltered, onDeleteRow,
+  units, goodsTypes, conditions, rooms, onGetAdditionalData, filtered }) {
   useInjectReducer({ key: 'inventoryPage', reducer });
   useInjectSaga({ key: 'inventoryPage', saga });
+  useInjectReducer({ key: 'unitPage', reducer: unitReducer });
+  useInjectSaga({ key: 'unitPage', saga: unitSaga });
+  useInjectReducer({ key: 'roomPage', reducer: roomReducer });
+  useInjectSaga({ key: 'roomPage', saga: roomSaga });
+  useInjectReducer({ key: 'goodsTypePage', reducer: goodsTypeReducer });
+  useInjectSaga({ key: 'goodsTypePage', saga: goodsTypeSaga });
+  useInjectReducer({ key: 'conditionPage', reducer: conditionReducer });
+  useInjectSaga({ key: 'conditionPage', saga: conditionSaga });
   const entity = "Master Data Inventaris";
 
   const delayedGetData = useCallback(debounce(onGetData, 2000), []); 
   useEffect(() => {
+    onGetAdditionalData(); 
     onGetData();
   }, []);
 
   const [dialogStatus, setDialogStatus] = useState(false);
   const [entityMode, setEntityMode] = useState('create');
   const [inventoryId, setInventoryId] = useState(null);
+  const [unit, setUnit] = useState(0);
+  const [goodsType, setGoodsType] = useState(0);
+  const [room, setRoom] = useState(0);
+  const [condition, setCondition] = useState(0);
 
   const handleCloseDialog = (md='cancel', rowData=null) => {
     if(md=='edit'){
@@ -138,6 +169,30 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
     }
   }
 
+  const handleChangeUnit = (event) => {
+    setUnit(event.target.value);
+    filtered.unit = event.target.value;
+    onChangeFiltered({...filtered})
+  }
+
+  const handleChangeGoodsType = (event) => {
+    setGoodsType(event.target.value);
+    filtered.goodsType = event.target.value;
+    onChangeFiltered({...filtered})
+  }
+
+  const handleChangeRoom = (event) => {
+    setRoom(event.target.value);
+    filtered.room = event.target.value;
+    onChangeFiltered({...filtered})
+  }
+
+  const handleChangeCondition = (event) => {
+    setCondition(event.target.value);
+    filtered.condition = event.target.value;
+    onChangeFiltered({...filtered})
+  }
+
   return (
     <div>
       <Helmet>
@@ -148,10 +203,80 @@ export function InventoryPage({ history, data, onExportData, search, onGetData, 
 
       <div>
       <Grid container spacing={3}>
-        <Grid item md={3}>
-          <TextField label='search' value={search} onChange={changeSearch} />
-        </Grid>
-        <Grid item md={7}>
+        <Grid item md={10}>
+          <Grid container spacing={3}>
+            <Grid item md={2}>
+              <TextField label='search' value={search} onChange={changeSearch} fullWidth />
+            </Grid>{goodsTypes != undefined &&
+            <Grid item md={2}>
+              <FormControl fullWidth>
+                <InputLabel id="select-type-label">Tipe</InputLabel>
+                <Select
+                  labelId="select-type-label"
+                  id="select-type"
+                  defaultValue=""
+                  onChange={handleChangeGoodsType}
+                >
+                  <MenuItem value={0}>Semua</MenuItem>
+                  { goodsTypes.map(item => (
+                      <MenuItem value={item.ID} key={item.ID}>{item.name}</MenuItem>
+                    ))
+                  }
+                </Select>
+              </FormControl>
+            </Grid>}{units != undefined &&
+            <Grid item md={2}>
+              <FormControl fullWidth>
+                <InputLabel id="select-unit-label">Satuan</InputLabel>
+                <Select
+                  labelId="select-unit-label"
+                  id="select-unit"
+                  defaultValue=""
+                  onChange={handleChangeUnit}
+                >
+                  <MenuItem value={0}>Semua</MenuItem>
+                  { units.map(item => (
+                      <MenuItem value={item.ID} key={item.ID}>{item.name}</MenuItem>
+                    ))
+                  }
+                </Select>
+              </FormControl>
+            </Grid>}{conditions != undefined &&
+            <Grid item md={2}>
+              <FormControl fullWidth>
+                <InputLabel id="select-condition-label">Kondisi</InputLabel>
+                <Select
+                  labelId="select-condition-label"
+                  id="select-condition"
+                  defaultValue=""
+                  onChange={handleChangeCondition}
+                >
+                  <MenuItem value={0}>Semua</MenuItem>
+                  { conditions.map(item => (
+                      <MenuItem value={item.ID} key={item.ID}>{item.name}</MenuItem>
+                    ))
+                  }
+                </Select>
+              </FormControl>
+            </Grid>}{rooms != undefined &&
+            <Grid item md={2}>
+              <FormControl fullWidth>
+                <InputLabel id="select-room-label">Ruang</InputLabel>
+                <Select
+                  labelId="select-room-label"
+                  id="select-room"
+                  defaultValue=""
+                  onChange={handleChangeRoom}
+                >
+                  <MenuItem value={0}>Semua</MenuItem>
+                  { rooms.map(item => (
+                      <MenuItem value={item.ID} key={item.ID}>{item.name}</MenuItem>
+                    ))
+                  }
+                </Select>
+              </FormControl>
+            </Grid>}
+          </Grid>
         </Grid>
         <Grid item md={2}>
           <Button
@@ -248,20 +373,34 @@ InventoryPage.propTypes = {
   onExportData: PropTypes.func,
   search: PropTypes.string,
   onGetData: PropTypes.func,
+  onGetAdditionalData: PropTypes.func,
   onChangeSearch: PropTypes.func,
   onChangeData: PropTypes.func,
+  onChangeFiltered: PropTypes.func,
   onDeleteRow: PropTypes.func,
+  unit: PropTypes.array,
+  goodsTypes: PropTypes.array,
+  rooms: PropTypes.array,
+  conditions: PropTypes.array,
+  filtered: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   data: makeSelectData(),
-  search: makeSelectSearch()
+  search: makeSelectSearch(),
+  units: makeSelectUnitList(),
+  goodsTypes: makeSelectGoodsTypeList(),
+  rooms: makeSelectRoomList(),
+  conditions: makeSelectConditionList(),
+  filtered: makeSelectFiltered()
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     onChangeSearch: payload => dispatch(changeSearch(payload)),
     onChangeData: payload => dispatch(changeData(payload)),
+    onChangeFiltered: payload => dispatch(changeFiltered(payload)),
+    onGetAdditionalData: evt => dispatch(getAdditionalData()),
     onExportData: evt => dispatch(exportData()),
     onGetData: evt => dispatch(getData()),
     onDeleteRow: payload => dispatch(deleteRow(payload))

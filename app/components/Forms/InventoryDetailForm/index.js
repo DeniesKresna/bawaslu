@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom'
 // import styled from 'styled-components';
 
-import { dateTimeNow } from '../../../utils/helpers';
+import { dateTimeNow, downloadDocs } from '../../../utils/helpers';
 import { serverBaseUrl } from '../../../utils/api';
 
 import TextField from '@material-ui/core/TextField';
@@ -19,6 +19,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import IconButton from '@material-ui/core/IconButton';
 import Assignment from '@material-ui/icons/Assignment';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 function InventoryDetailForm({
   title, goBack, rowData, unitList, roomList, conditionList, goodsTypeList, onSubmitForm, entityMode
@@ -35,7 +36,7 @@ function InventoryDetailForm({
   const [price, setPrice] = useState({value:rowDataCopy.price, error: false, helperText: ''});
   const [room, setRoom] = useState({value:rowDataCopy.RoomID, error: false, helperText: ''});
   const [image, setImage] = useState({value:'', error: false, helperText: ''});
-  const [imageUrl, setImageUrl] = useState(rowDataCopy.imageUrl != ""?serverBaseUrl + 'medias?path=' + rowDataCopy.imageUrl:null);
+  const [imageUrl, setImageUrl] = useState((rowDataCopy.imageUrl == "" || entityMode == 'create') ? null : serverBaseUrl + 'medias?path=' + rowDataCopy.imageUrl);
   const [imageReceive, setImageReceive] = useState({value:'', error: false, helperText: ''});
   const [imageReceiveUrl, setImageReceiveUrl] = useState(null);
   const [procurementDoc, setProcurementDoc] = useState({value:'', error: false, helperText: ''});
@@ -215,10 +216,7 @@ function InventoryDetailForm({
   const onChangeImage = (event) => {
     const inputValue = event.target.files[0];
     let field = {}
-    if(inputValue == null){
-      field.error = true,
-      field.helperText = "wajib diisi"
-    }else if(inputValue.size/1024/1024 > 2){
+    if(inputValue.size/1024/1024 > 2){
       field.error = true,
       field.helperText = "jangan lebih dari 2 mb"
       return
@@ -229,6 +227,15 @@ function InventoryDetailForm({
     field.value = inputValue
     setImageUrl(URL.createObjectURL(inputValue));
     setImage(field);
+  }
+
+  const removePicture = () => {
+    let field = {
+      error : false,
+      helperText : ""
+    }
+    setImage(field);
+    setImageUrl(null);
   }
 
   const onChangeImageReceive = (event) => {
@@ -359,19 +366,19 @@ function InventoryDetailForm({
         <Grid item md={6}>
           <TextField label='Harga Satuan' value={price.value || ''} onChange={onChangePrice} type="number" error={price.error} helperText={price.helperText} fullWidth />
         </Grid>
-        {/* entityMode == "create" &&
+        {entityMode == "create" &&
           <Grid item md={12}>
             <Autocomplete options={roomList} getOptionLabel={(option) => option.name || ''} value={findObjectById(roomList, room.value)}
               getOptionSelected={(option, value) => option.ID === value.ID || {}} onChange={onChangeRoom}
                 renderInput={(params) => <TextField {...params} label='Ruangan' error={room.error} helperText={room.helperText} fullWidth />}
               />
-          </Grid>*/
+          </Grid>
         }
-        {/* entityMode == "create" &&
+        {entityMode == "create" &&
           <Grid item md={12}>
             <TextField label='Tanggal Pengadaan' onChange={onChangeMoveTime} type="datetime-local" error={moveTime.error} helperText={moveTime.helperText} 
             value={moveTime.value} InputLabelProps={{shrink: true}} fullWidth />
-          </Grid>*/
+          </Grid>
         }
         <Grid item md={12}>
           <input accept="image/*" id="icon-button-image" type="file" style={{ display: 'none' }} onChange={onChangeImage}/>
@@ -383,9 +390,9 @@ function InventoryDetailForm({
           </label>
         </Grid>
         {
-          (imageUrl != null) && <Grid item md={12}>
-            <img src={imageUrl} height="200" />
-          </Grid>
+          imageUrl? <Grid item md={12}>
+            <img src={imageUrl} height="200" /><br /><span onClick={removePicture}><HighlightOffIcon/>Delete</span>
+          </Grid> : "-"
         }
         {/*entityMode == 'create' && <Grid item md={12}>
           <input accept="image/*" id="icon-button-image-receive" type="file" style={{ display: 'none' }} onChange={onChangeImageReceive}/>
@@ -403,29 +410,29 @@ function InventoryDetailForm({
           </Grid>
         */}
         <Grid item md={12}>
-          <input accept="application/msword, application/pdf" id="icon-button-procurement" type="file" style={{ display: 'none' }} onChange={onChangeProcurementDoc}/>
+          <input accept=".doc, .docx,.txt,.pdf" id="icon-button-procurement" type="file" style={{ display: 'none' }} onChange={onChangeProcurementDoc}/>
           <label htmlFor="icon-button-procurement">
             <Button color="primary" aria-label="upload document" component="span" >
               <Assignment /> <small>Document Pengadaan</small>
               { procurementDoc.error && procurementDoc.helperText }
             </Button>
           </label>
-          {procurementDocUrl && <small> <a href={serverBaseUrl + "ivt?inventoryId=" + rowData.ID + "&docType=procurement"} target="_blank">Download</a> </small>}
+          {procurementDocUrl && <small> <span onClick={()=>{downloadDocs(serverBaseUrl + "ivt?inventoryId=" + rowData.ID + "&docType=procurement", rowData.procurementDocUrl)}}>[Download]</span></small>}
         </Grid>
         <Grid item md={12}>
-          <input accept="application/msword, application/pdf" id="icon-button-status" type="file" style={{ display: 'none' }} onChange={onChangeStatusDoc}/>
+          <input accept=".doc, .docx,.txt,.pdf" id="icon-button-status" type="file" style={{ display: 'none' }} onChange={onChangeStatusDoc}/>
           <label htmlFor="icon-button-status">
             <Button color="secondary" aria-label="upload document" component="span" >
               <Assignment /> <small>Document Penetapan Status</small>
               { statusDoc.error && statusDoc.helperText }
             </Button>
           </label>
-          {statusDocUrl && <small><a href={serverBaseUrl + "ivt?inventoryId=" + rowData.ID + "&docType=status"} target="_blank">Download</a> </small>}
+          {statusDocUrl && <small><span onClick={()=>{downloadDocs(serverBaseUrl + "ivt?inventoryId=" + rowData.ID + "&docType=status", rowData.statusDocUrl)}}>[Download]</span> </small>}
         </Grid>
-        {/*entityMode == 'create' && <Grid item md={12}>
+        {entityMode == 'create' && <Grid item md={12}>
             <TextField label='Deskripsi Pengadaan' value={moveDescription.value || ''} onChange={onChangeMoveDescription} error={moveDescription.error} helperText={moveDescription.helperText} fullWidth/>
           </Grid>
-      */}
+      }
 
         <Grid item md={12}>
           <Button onClick={goBack} color="secondary">
