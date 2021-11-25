@@ -32,6 +32,7 @@ import Button from '@material-ui/core/Button';
 export function HistoryPage({ inventoryId, roomList, conditionList, data, search, onGetData, onChangeSearch, onChangeData, onChangeRow, onDeleteRow }) {
   useInjectReducer({ key: 'historyPage', reducer });
   useInjectSaga({ key: 'historyPage', saga });
+  const entity = "Kondisi";
 
   const delayedGetData = useCallback(debounce(onGetData, 2000), []); 
   useEffect(() => {
