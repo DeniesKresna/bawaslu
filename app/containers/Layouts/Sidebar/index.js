@@ -175,7 +175,7 @@ export function Sidebar({onGetUser, user}) {
             </ListItem>
         </List>{
         <List component="div" disablePadding>
-            <ListItem button className={classes.nested} component="a" href='https://drive.google.com/file/d/1sZlWRGfjwgaa_n7qFrnPqoPZsJ4vReW1/view?usp=sharing' target="_blank">
+            <ListItem button className={classes.nested} component="a" href='https://drive.google.com/file/d/17bF1VnA3xMlnnv2J_FQX38n5g_1S3GOt/view?usp=sharing' target="_blank">
               <ListItemIcon>
                 <MenuBookIcon />
               </ListItemIcon>
