@@ -157,7 +157,7 @@ function CommonTable({tableData, search, columns, canBeUpdate, canBeDelete, canB
           {getSurveyValue(row.faster)}
         </StyledTableCell>)
       case 'updater':
-        return <StyledTableCell key={col} align="right">{row.Updater.name}</StyledTableCell>
+        return <StyledTableCell key={col} align="right">{row.Updater? row.Updater.name : ""}</StyledTableCell>
       case 'operation':
         return (
           <StyledTableCell key={col} align="right">
