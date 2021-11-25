@@ -21,6 +21,7 @@ export function* getData(action) {
     yield put(getDataSuccess(data.Data));
     yield put(changeLoading(false));
   } catch (error) {
+    console.log(error);
     yield put(changeNotifStatus({
       open: true,
       title: 'Gagal',
@@ -98,7 +99,7 @@ export function* getData(action) {
     yield put(changeLoading(true));
     const url = key;
     const data = yield call(request, "DELETE", url + '/' + action.payload.ID);
-    yield call(getData);
+    yield call(getData, {payload: action.payload.ID});
     yield put(changeNotifStatus({
       open: true,
       title: 'Sukses',
