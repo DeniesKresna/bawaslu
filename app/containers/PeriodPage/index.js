@@ -32,6 +32,7 @@ import Button from '@material-ui/core/Button';
 export function PeriodPage({ data, search, onGetData, onChangeSearch, onChangeData, onChangeRow, onDeleteRow }) {
   useInjectReducer({ key: 'periodPage', reducer });
   useInjectSaga({ key: 'periodPage', saga });
+  const entity = "Periode";
   const delayedGetData = useCallback(debounce(onGetData, 2000), []); 
   useEffect(() => {
     onGetData();
@@ -91,6 +92,7 @@ export function PeriodPage({ data, search, onGetData, onChangeSearch, onChangeDa
   return (
     <div>
       <Helmet>
+        <title>{entity}</title>
         <meta name="description" content="Pengaturan Barang Inventaris" />
       </Helmet>
 
